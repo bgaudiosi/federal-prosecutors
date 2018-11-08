@@ -14,7 +14,6 @@ def gs_also_known():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_also_known.txt'
-    columns = ["DISTRICT", "CASEID", "PARTID", "ID", "LAST_NAME", "FIRST_NAME", "LAST_SOUNDS", "FIRST_SOUNDS", "CREATE_DATE", "CREATE_USER", "UPDATE_DATE", "UPDATE_USER"]
     data = []
     with open(filename) as file:
         for line in file:
@@ -38,7 +37,6 @@ def gs_archive_case():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_archive_case.txt'
-    columns = ['DISTRICT','ID']
     data = []
     with open(filename) as file:
         for line in file:
@@ -82,7 +80,6 @@ def gs_archive_part():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_archive_part.txt'
-    columns = []
     data = []
     with open(filename) as file:
         for line in file:
@@ -109,7 +106,6 @@ def gs_case():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_case.txt'
-    columns = ["DISTRICT", "ID", "CLASS", "NAME"]
     data = []
     with open(filename) as file:
         for line in file:
@@ -164,7 +160,6 @@ def gs_case_cause_act():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_case_cause_act.txt'
-    columns = []
     data = []
     with open(filename) as file:
         for line in file:
@@ -184,7 +179,6 @@ def gs_case_doj_div():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_case_doj_div.txt'
-    columns = []
     data = []
     with open(filename) as file:
         for line in file:
@@ -205,7 +199,6 @@ def gs_case_dom_terr_ind():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_case_dom_terr_ind.txt'
-    columns = []
     data = []
     with open(filename) as file:
         for line in file:
@@ -225,7 +218,6 @@ def gs_case_prog_cat():
     global DIR
     disk = "DISK01"
     filename = DIR + disk + '/gs_case_prog_cat.txt'
-    columns = []
     data = []
     with open(filename) as file:
         for line in file:
@@ -240,6 +232,411 @@ def gs_case_prog_cat():
             row['UPDATE_USER'] = line[85:115]
             data.append(row)
     return data
+
+# Parse DISK02
+def gs_case_special_proj():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_case_special_proj.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['ID'] = line[10:20]
+            row['CASEID'] = line[20:30]
+            row['SPECIAL_PROJ'] = line[30:32]
+            row['CREATE_DATE'] = line[32:43]
+            row['CREATE_USER'] = line[43:73]
+            row['UPDATE_DATE'] = line[73:84]
+            row['UPDATE_USER'] = line[84:114]
+            data.append(row)
+    return data
+
+def gs_evidence():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_evidence.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['ID'] = line[20:30]
+            row['LOCATION'] = line[30:34]
+            row['TYPE'] = line[34:36]
+            row['DISPOSITION'] = line[36:37]
+            row['STORE_DATE'] = line[37:48]
+            row['DISP_DATE'] = line[48:59]
+            row['DC_EXHIBIT_NUM'] = line[59:84]
+            row['GJ_EXHIBIT_NUM'] = line[84:109]
+            row['CREATE_DATE'] = line[109:120]
+            row['CREATE_USER'] = line[120:150]
+            row['UPDATED_DATE'] = line[150:161]
+            row['UPDATE_USER'] = line[161:191]
+            data.append(row)
+    return data
+
+def gs_expert_case():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_expert_case.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['ID'] = line[20:30]
+            row['EXP_SIDE'] = line[30:31]
+            row['EXPERTID'] = line[31:41]
+            row['CREATE_DATE'] = line[41:52]
+            row['CREATE_USER'] = line[52:82]
+            row['UPDATED_DATE'] = line[82:93]
+            row['UPDATE_USER'] = line[93:123]
+            data.append(row)
+    return data
+
+def gs_inst_charge():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_inst_charge.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['CRTHISID'] = line[20:30]
+            row['INSTID'] = line[30:40]
+            row['CHARGE'] = line[40:65]
+            row['CATEGORY'] = line[65:66]
+            row['PENT_PROV'] = line[66:91]
+            row['CREATE_DATE'] = line[91:102]
+            row['CREATE_USER'] = line[102:132]
+            row['UPDATED_DATE'] = line[132:143]
+            row['UPDATE_USER'] = line[143:173]
+            row['ID'] = line[173:183]
+            data.append(row)
+    return data
+
+def gs_part_victim():
+    global dir
+    disk = "disk02"
+    filename = dir + disk + '/gs_part_victim.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['PARTID'] = line[20:30]
+            row['ID'] = line[30:40]
+            row['VICTIM_TYPE'] = line[40:41]
+            row['PROSECUTION'] = line[41:42]
+            row['VICTIM_TIMES'] = line[43:53]
+            row['THREATS'] = line[53:54]
+            row['ELDERLY'] = line[54:55]
+            row['VICTIM_IDENTIFIER'] = line[55:80]
+            row['STATE_COMP_RECVD'] = line[80:94]
+            row['SERVICES_REQUESTED'] = line[94:95]
+            row['VIOLENT_CRIME'] = line[95:96]
+            row['DISABILITY'] = line[96:97]
+            row['NOTIFICAT_REQSTD'] = line[97:98]
+            row['NOTIFICAT_RECVD'] = line[98:99]
+            row['CREATE_DATE'] = line[99:110]
+            row['CREATE_USER'] = line[110:140]
+            row['UPDATED_DATE'] = line[140:151]
+            row['UPDATE_USER'] = line[151:181]
+            data.append(row)
+    return data
+
+def gs_relate_case():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_relate_case.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID1'] = line[10:20]
+            row['CASEID2'] = line[20:30]
+            row['CRTHISD1'] = line[30:40]
+            row['CRTHISD2'] = line[40:50]
+            row['REASON'] = line[50:52]
+            row['CREATE_DATE'] = line[52:63]
+            row['CREATE_USER'] = line[63:93]
+            row['UPDATED_DATE'] = line[93:104]
+            row['UPDATE_USER'] = line[104:134]
+            row['ID'] = line[134:144]
+            data.append(row)
+    return data
+
+def gs_relate_part():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_relate_part.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['PARTID1'] = line[20:30]
+            row['PARTID2'] = line[30:40]
+            row['REASON'] = line[40:42]
+            row['CREATE_DATE'] = line[42:53]
+            row['CREATE_USER'] = line[53:83]
+            row['UPDATED_DATE'] = line[83:94]
+            row['UPDATE_USER'] = line[94:125]
+            data.append(row)
+    return data
+
+def gs_cont_services():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_cont_services.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['PARTID'] = line[20:30]
+            row['CONTID'] = line[30:40]
+            row['ID'] = line[40:50]
+            row['SERV_AGENCY'] = line[50:61]
+            row['SERV_TYPE'] = line[61:65]
+            row['SERV_LANGUAGE'] = line[65:68]
+            row['SERV_SPECIAL'] = line[68:72]
+            row['CREATE_DATE'] = line[72:83]
+            row['CREATE_USER'] = line[83:113]
+            row['UPDATED_DATE'] = line[113:124]
+            row['UPDATE_USER'] = line[124:154]
+            data.append(row)
+    return data
+
+def gs_contact_log():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_contact_log.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['PARTID'] = line[20:30]
+            row['ID'] = line[30:40]
+            row['CONT_DATE'] = line[40:51]
+            row['PURPOSE'] = line[51:53]
+            row['TYPE'] = line[53:55]
+            row['INITIATOR'] = line[55:57]
+            row['STAFFID'] = line[57:67]
+            row['DOC_CODE'] = line[67:70]
+            row['CREATE_DATE'] = line[70:81]
+            row['CREATE_USER'] = line[81:111]
+            row['UPDATED_DATE'] = line[111:122]
+            row['UPDATE_USER'] = line[122:152]
+            data.append(row)
+    return data
+
+def gs_control_sub():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_control_sub.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['ID'] = line[20:30]
+            row['TYPE'] = line[30:31]
+            row['QUANTITY'] = line[31:45]
+            row['MEASURE'] = line[45:46]
+            row['OTHER_DESCRIP'] = line[46:76]
+            row['CREATE_DATE'] = line[76:87]
+            row['CREATE_USER'] = line[87:117]
+            row['UPDATED_DATE'] = line[117:128]
+            row['UPDATE_USER'] = line[128:158]
+            data.append(row)
+    return data
+
+def gs_count():
+    global DIR
+    disk = "DISK02"
+    filename = DIR + disk + '/gs_count.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['ID'] = line[20:30]
+            row['TYPE'] = line[30:31]
+            row['QUANTITY'] = line[31:45]
+            row['MEASURE'] = line[45:46]
+            row['OTHER_DESCRIP'] = line[46:76]
+            row['CREATE_DATE'] = line[76:87]
+            row['CREATE_USER'] = line[87:117]
+            row['UPDATED_DATE'] = line[117:128]
+            row['UPDATE_USER'] = line[128:158]
+            row['PENT_PROV'] = line[158:183]
+            data.append(row)
+    return data
+
+# Parse DISK03
+def gs_court_hist():
+    global DIR
+    disk = "DISK03"
+    filename = DIR + disk + '/gs_court_hist.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['ID'] = line[20:30]
+            row['COURT'] = line[30:32]
+            row['LOCATION'] = line[32:34]
+            row['US_ROLE'] = line[34:36]
+            row['COURT_NUMBER'] = line[36:61]
+            row['FILING_DATE'] = line[61:72]
+            row['SERVICE_DATE'] = line[72:83]
+            row['TRIAL_DAYS'] = line[83:97]
+            row['NOAP_DATE'] = line[97:108]
+            row['APPEAL_TYPE'] = line[108:109]
+            row['SENT_APPEAL'] = line[109:110]
+            row['DISPOSITION'] = line[100:112]
+            row['DISP_DATE'] = line[112:123]
+            row['DISP_REASON1'] = line[123:127]
+            row['DISP_REASON2'] = line[127:131]
+            row['DISP_REASON3'] = line[131:135]
+            row['SYS_DISP_DATE'] = line[135:146]
+            row['SYS_FILING_DATE'] = line[146:157]
+            row['CREATE_DATE'] = line[157:168]
+            row['CREATE_USER'] = line[168:198]
+            row['UPDATED_DATE'] = line[198:209]
+            row['UPDATE_USER'] = line[209:239]
+            data.append(row)
+    return data
+
+def gs_court_judge():
+    global DIR
+    disk = "DISK03"
+    filename = DIR + disk + '/gs_court_judge.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['CRTHISID'] = line[20:30]
+            row['ID'] = line[30:40]
+            row['JUDGEID'] = line[40:50]
+            row['DECISION'] = line[50:54]
+            row['START_DATE'] = line[54:65]
+            row['END_DATE'] = line[65:76]
+            row['CREATE_DATE'] = line[76:87]
+            row['CREATE_USER'] = line[87:117]
+            row['UPDATED_DATE'] = line[117:128]
+            row['UPDATE_USER'] = line[128:158]
+            data.append(row)
+    return data
+
+def gs_dna():
+    global DIR
+    disk = "DISK03"
+    filename = DIR + disk + '/gs_dna.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:3]
+            row['ID'] = line[3:13]
+            row['CASEID'] = line[13:23]
+            row['PROCEEDINGS_AFT_RELIEF_GRANTED'] = line[23:24]
+            row['NEW_TRIAL_ORD'] = line[24:25]
+            row['CHARGE_DISMISSED'] = line[25:26]
+            row['GUILTY_PLEA_ENTERED'] = line[26:27]
+            row['FOUND_GUILTY'] = line[27:28]
+            row['ACQUITTED'] = line[28:29]
+            row['RESENTENCING_CAP_CASE'] = line[29:30]
+            row['TESTING_ORDERED'] = line[30:31]
+            row['RELIEF_GRANTED'] = line[31:32]
+            row['COMMENTS'] = line[32:33]
+            row['CREATE_DATE'] = line[33:44]
+            row['CREATE_USER'] = line[44:74]
+            row['UPDATED_DATE'] = line[74:85]
+            row['UPDATE_USER'] = line[85:115]
+            data.append(row)
+    return data
+
+def gs_prop_value():
+    global DIR
+    disk = "DISK03"
+    filename = DIR + disk + '/gs_prop_value.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['PARTID'] = line[20:30]
+            row['ID'] = line[30:40]
+            row['TYPE'] = line[40:42]
+            row['VALUE'] = line[42:56]
+            row['PROP_DATE'] = line[56:67]
+            row['CREATE_DATE'] = line[67:78]
+            row['CREATE_USER'] = line[78:108]
+            row['UPDATED_DATE'] = line[108:119]
+            row['UPDATE_USER'] = line[119:149]
+            data.append(row)
+    return data
+
+def gs_region():
+    global DIR
+    disk = "DISK03"
+    filename = DIR + disk + '/gs_region.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:3]
+            row['BRANCH'] = line[3:6]
+            row['DESCRIPTION'] = line[6:36]
+            row['CREATE_DATE'] = line[36:47]
+            row['CREATE_USER'] = line[47:77]
+            row['UPDATED_DATE'] = line[77:88]
+            row['UPDATE_USER'] = line[88:118]
+            data.append(row)
+    return data
+
+def gs_relate_appeal():
+    global DIR
+    disk = "DISK03"
+    filename = DIR + disk + '/gs_relate_appeal.txt'
+    data = []
+    with open(filename) as file:
+        for line in file:
+            row = {}
+            row['DISTRICT'] = line[0:10]
+            row['CASEID1'] = line[0:20]
+            row['CRTHISID1'] = line[20:30]
+            row['CASEID2'] = line[30:40]
+            row['CRTHISID2'] = line[40:50]
+            row['REASON'] = line[50:52]
+            row['CREATE_DATE'] = line[52:63]
+            row['CREATE_USER'] = line[63:93]
+            row['UPDATED_DATE'] = line[93:104]
+            row['UPDATE_USER'] = line[104:134]
+            data.append(row)
+    return data
+
+# DISK04
 
 def find_Info():
     """Extracts fields from the LIONS database for testing purposes"""
