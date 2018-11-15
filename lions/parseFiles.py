@@ -4,10 +4,10 @@
 # Preliminary code to parse through the .txt files and extract certain fields.
 # Primarily using this file to explore the various data.
 import sys
-import numpy as np
-import pandas as pd
+import re
+from itertools import groupby
 
-DIR = "/Volumes/ESD-USB/"
+DIR = "data/"
 
 def get_district_list():
     districts = ["AK", "ALM", "ALN", "ALS", "ARE", \
@@ -1200,9 +1200,820 @@ def gs_staff():
             row['ACTION_STAGE'] = line[409:419]
             row['DR_USERNAME'] = line[419:449]
             row['GUID'] = line[449:479]
-           data.append(row)
+            data.append(row)
     return data
 
+# Now, in disk24, there's a bunch of constant tables that need to be translated
+# These tables all have codes and their meanings, which vary depending on district
+def gs_action():
+    global DIR
+    filename = DIR + 'table_gs_action.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_agency_off():
+    global DIR
+    filename = DIR + 'table_gs_agency_off.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['ID'] = line[9:20]
+            row['AGENCY'] = line[21:25]
+            row['OFFICE'] = line[26:86]
+            row['ADDRESS1'] = line[87:117]
+            row['ADDRESS2'] = line[118:148]
+            row['ADDRESS3'] = line[149:179]
+            row['CITY'] = line[180:200]
+            row['STATE'] = line[201:206]
+            row['ZIPCODE'] = line[207:217]
+            row['SALUTATION'] = line[218:228]
+            row['CHIEF_LAST_NAME'] = line[229:259]
+            row['CHIEF_FIRST_NAME'] = line[260:290]
+            row['CHIEF_TITLE'] = line[291:321]
+            row['CREATE_DATE'] = line[322:332]
+            row['CREATE_USER'] = line[333:363]
+            row['UPDATED_DATE'] = line[364:374]
+            row['UPDATE_USER'] = line[375:405]
+            data.append(row)
+    return data
+
+def gs_business_type():
+    global DIR
+    filename = DIR + 'table_gs_business_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[114:145]
+            data.append(row)
+    return data
+
+def gs_case_type():
+    global DIR
+    filename = DIR + 'table_gs_case_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['TYPE'] = line[45:50]
+            row['CODE_STAT'] = line[51:59]
+            row['GLB_CODE'] = line[60:67]
+            row['CREATE_DATE'] = line[68:78]
+            row['CREATE_USER'] = line[79:109]
+            row['UPDATED_DATE'] = line[110:120]
+            row['UPDATE_USER'] = line[121:151]
+            data.append(row)
+    return data
+
+def gs_case_weight():
+    global DIR
+    filename = DIR + 'table_gs_case_weight.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+
+def gs_counsel_type():
+    global DIR
+    filename = DIR + 'table_gs_counsel_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:54]
+            row['CODE_STAT'] = line[55:63]
+            row['GLB_CODE'] = line[64:71]
+            row['CREATE_DATE'] = line[72:82]
+            row['CREATE_USER'] = line[83:113]
+            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_USER'] = line[125:155]
+            data.append(row)
+    return data
+
+
+def gs_court_loc():
+    global DIR
+    filename = DIR + 'table_gs_court_loc.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['COURT'] = line[9:11]
+            row['LOCATION'] = line[12:14]
+            row['DESCRIPTION'] = line[15:75]
+            row['CREATE_DATE'] = line[76:86]
+            row['CREATE_USER'] = line[878:117]
+            row['UPDATED_DATE'] = line[118:128]
+            row['UPDATE_USER'] = line[129:159]
+            data.append(row)
+    return data
+
+
+def gs_deten_reason():
+    global DIR
+    filename = DIR + 'table_gs_deten_reason.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+# this one's a little messed up
+def gs_event_type():
+    global DIR
+    filename = DIR + 'table_gs_event_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 6:
+                count += 1
+                continue
+
+            if count % 0 != 0:
+                continue
+
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:84]
+            row['TYPE'] = line[85:90]
+            row['CODE_STAT'] = line[91:99]
+            row['GLB_CODE'] = line[100:107]
+            row['CREATE_DATE'] = line[108:118]
+            row['CREATE_USER'] = line[119:149]
+            row['UPDATED_DATE'] = line[150:160]
+            #row['UPDATE_USER'] = line[]
+            data.append(row)
+    return data
+
+def gs_evid_disp():
+    global DIR
+    filename = DIR + 'table_gs_evid_disp.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:39]
+            row['CODE_STAT'] = line[40:48]
+            row['GLB_CODE'] = line[59:56]
+            row['CREATE_DATE'] = line[57:67]
+            row['CREATE_USER'] = line[68:98]
+            row['UPDATED_DATE'] = line[99:109]
+            row['UPDATE_USER'] = line[110:140]
+            data.append(row)
+    return data
+
+def gs_evid_location():
+    global DIR
+    filename = DIR + 'table_gs_evid_location.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_evid_type():
+    global DIR
+    filename = DIR + 'table_gs_evid_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:54]
+            row['CODE_STAT'] = line[55:63]
+            row['GLB_CODE'] = line[64:71]
+            row['CREATE_DATE'] = line[72:82]
+            row['CREATE_USER'] = line[83:113]
+            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_USER'] = line[125:115]
+            data.append(row)
+    return data
+
+def gs_expert():
+    global DIR
+    filename = DIR + 'table_gs_expert.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['ID'] = line[9:20]
+            row['INITIALS'] = line[21:29]
+            row['INIT_STAT'] = line[30:38]
+            row['TYPE'] = line[39:43]
+            row['SSN'] = line[44:55]
+            row['SALUTATION'] = line[56:66]
+            row['LAST_NAME'] = line[67:97]
+            row['FIRST_NAME'] = line[98:128]
+            row['TITLE'] = line[129:149]
+            row['ADDRESS_1'] = line[160:190]
+            row['ADDRESS_2'] = line[191:221]
+            row['ADDRESS_3'] = line[222:252]
+            row['CITY'] = line[253:273]
+            row['STATE'] = line[274:279]
+            row['ZIPCODE'] = line[280:290]
+            row['PHONE'] = line[291:306]
+            row['FAX'] = line[307:322]
+            row['CREATE_DATE'] = line[323:333]
+            row['CREATE_USER'] = line[334:364]
+            row['UPDATED_DATE'] = line[364:375]
+            row['UPDATE_USER'] = line[376:406]
+            data.append(row)
+    return data
+
+def gs_expert_type():
+    global DIR
+    filename = DIR + 'table_gs_expert_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_immig_stat():
+    global DIR
+    filename = DIR + 'table_gs_immig_stat.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+    return data
+
+def gs_job_position():
+    global DIR
+    filename = DIR + 'table_gs_job_position.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_judge():
+    global DIR
+    filename = DIR + 'table_gs_judge.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['ID'] = line[8:20]
+            row['INITIALS'] = line[21:29]
+            row['INIT_STAT'] = line[30:34]
+            row['LAST_NAME'] = line[35:65]
+            row['FIRST_NAME'] = line[66:96]
+            row['COURT_ROOM'] = line[97:122]
+            row['TYPE'] = line[123:127]
+            row['CREATE_DATE'] = line[128:138]
+            row['CREATE_USER'] = line[139:169]
+            row['UPDATED_DATE'] = line[170:180]
+            row['UPDATE_USER'] = line[181:211]
+            data.append(row)
+    return data
+
+def gs_judge_type():
+    global DIR
+    filename = DIR + 'table_gs_judge_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_lit_track():
+    global DIR
+    filename = DIR + 'table_gs_lit_track.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+
+def gs_location():
+    global DIR
+    filename = DIR + 'table_gs_location.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_oppose_attorn():
+    global DIR
+    filename = DIR + 'table_gs_oppose_attorn.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['ID'] = line[9:20]
+            row['INITIALS'] = line[21:31]
+            row['INIT_STAT'] = line[32:40]
+            row['SALUTATION'] = line[41:51]
+            row['LAST_NAME'] = line[52:82]
+            row['FIRST_NAME'] = line[83:113]
+            row['TITLE'] = line[114:144]
+            row['FIRM'] = line[145:195]
+            row['ADDRESS1'] = line[196:226]
+            row['ADDRESS2'] = line[227:257]
+            row['ADDRESS3'] = line[258:288]
+            row['CITY'] = line[289:309]
+            row['STATE'] = line[310:315]
+            row['ZIPCODE'] = line[316:326]
+            row['PHONE'] = line[327:342]
+            row['FAX'] = line[343:358]
+            row['CREATE_DATE'] = line[359:369]
+            row['CREATE_USER'] = line[370:400]
+            row['UPDATED_DATE'] = line[401:411]
+            row['UPDATE_USER'] = line[412:442]
+            data.append(row)
+    return data
+
+def gs_position():
+    global DIR
+    filename = DIR + 'table_gs_position.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_prop_type():
+    global DIR
+    filename = DIR + 'table_gs_prop_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_prop_value_type():
+    global DIR
+    filename = DIR + 'table_gs_prop_value_type.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:64]
+            row['CODE_STAT'] = line[65:73]
+            row['GLB_CODE'] = line[74:81]
+            row['CREATE_DATE'] = line[82:92]
+            row['CREATE_USER'] = line[93:123]
+            row['UPDATED_DATE'] = line[124:134]
+            row['UPDATE_USER'] = line[135:165]
+            data.append(row)
+    return data
+
+def gs_relate_case_reason():
+    global DIR
+    filename = DIR + 'table_gs_relate_case_reason.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:64]
+            row['CODE_STAT'] = line[65:73]
+            row['GLB_CODE'] = line[74:81]
+            row['CREATE_DATE'] = line[82:92]
+            row['CREATE_USER'] = line[93:123]
+            row['UPDATED_DATE'] = line[124:134]
+            row['UPDATE_USER'] = line[135:165]
+            data.append(row)
+    return data
+
+def gs_relate_part_reason():
+    global DIR
+    filename = DIR + 'table_gs_relate_part_reason.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:44]
+            row['CODE_STAT'] = line[45:53]
+            row['GLB_CODE'] = line[54:61]
+            row['CREATE_DATE'] = line[62:72]
+            row['CREATE_USER'] = line[73:103]
+            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_USER'] = line[115:145]
+            data.append(row)
+    return data
+
+def gs_reservation():
+    global DIR
+    filename = DIR + 'table_gs_reservation.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:54]
+            row['CODE_STAT'] = line[55:63]
+            row['GLB_CODE'] = line[64:71]
+            row['CREATE_DATE'] = line[72:82]
+            row['CREATE_USER'] = line[83:113]
+            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_USER'] = line[125:155]
+            data.append(row)
+    return data
+
+def gs_security():
+    global DIR
+    filename = DIR + 'table_gs_security.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:54]
+            row['CODE_STAT'] = line[55:63]
+            row['GLB_CODE'] = line[64:71]
+            row['CREATE_DATE'] = line[72:82]
+            row['CREATE_USER'] = line[83:113]
+            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_USER'] = line[125:155]
+            data.append(row)
+    return data
+
+def gs_staff_section():
+    global DIR
+    filename = DIR + 'table_gs_staff_section.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:17]
+            row['DESCRIPTION'] = line[18:68]
+            row['CODE_STAT'] = line[69:77]
+            row['GLB_CODE'] = line[78:85]
+            row['CREATE_DATE'] = line[86:96]
+            row['CREATE_USER'] = line[97:127]
+            row['UPDATED_DATE'] = line[128:138]
+            row['UPDATE_USER'] = line[139:169]
+            data.append(row)
+    return data
+
+def gs_staff_title():
+    global DIR
+    filename = DIR + 'table_gs_staff_title.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:64]
+            row['CODE_STAT'] = line[65:73]
+            row['GLB_CODE'] = line[74:81]
+            row['CREATE_DATE'] = line[82:92]
+            row['CREATE_USER'] = line[93:123]
+            row['UPDATED_DATE'] = line[124:134]
+            row['UPDATE_USER'] = line[135:165]
+            data.append(row)
+    return data
+
+def gs_unit():
+    global DIR
+    filename = DIR + 'table_gs_unit.txt'
+    data = []
+    count = 0
+    with open(filename) as file:
+        for line in file:
+            if count < 4:
+                count += 1
+                continue
+            row = {}
+            row['DISTRICT'] = line[0:8]
+            row['CODE'] = line[9:13]
+            row['DESCRIPTION'] = line[14:54]
+            row['CODE_STAT'] = line[55:63]
+            row['GLB_CODE'] = line[64:71]
+            row['CREATE_DATE'] = line[72:82]
+            row['CREATE_USER'] = line[83:113]
+            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_USER'] = line[125:155]
+            data.append(row)
+    return data
+
+def find_indices(line):
+    return [(m.start(), m.end()) for m in re.finditer(r'\S+', line)]
+
+# https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case
+def convert(name):
+    s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).upper()
+
+def parse_global_LIONS():
+    global DIR
+    filename = DIR + 'global_LIONS.txt'
+    datasets = {}
+    data = []
+    count = 0
+    with open(filename) as file:
+        current_table = ""
+        indices = []
+        fields = []
+        for line in file:
+            if len(line) < 2:
+                continue
+            if "GS_" in line:
+                if len(data) > 0:
+                    datasets[current_table] = data
+                    data = []
+                    indices = []
+                current_table = line[:-1]
+                count = 0
+
+            if count < 3:
+                if "CreateDate" in line:
+                    fields_bad = line.split()
+                    fields = [convert(f) for f in fields_bad]
+                    #print(fields)
+                if "--" in line:
+                    indices = find_indices(line)
+                    #print(indices)
+                count += 1
+                continue
+            row = {}
+            for i in range(len(fields)):
+                row[fields[i]] = line[indices[i][0]:indices[i][1]]
+            data.append(row)
+    return datasets
+
+
+def create_complete_lions_dictionary():
+
+
+# Last thing is the stuff in lions global_LIONS.txt
 def find_Info():
     """Extracts fields from the LIONS database for testing purposes"""
 
