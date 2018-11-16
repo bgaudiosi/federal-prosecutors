@@ -37,6 +37,14 @@ def gs_also_known():
     global DIR
     filename = DIR + 'gs_also_known.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASE_ID', 'PART_ID', 'DISTRICT'],
+            'foreign':[
+               'DISTRICT REFERENCES GS_DISTRICT(DISTRICT)'
+               'CASEID REFERENCES GS_CASE(ID)',
+               'PART_ID REFERENCES GS_PARTICPANT(ID)',
+             ]
+           }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1972,6 +1980,8 @@ def convert(name):
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).upper()
 
+
+# Last thing is the stuff in lions global_LIONS.txt
 def parse_global_LIONS():
     global DIR
     filename = DIR + 'global_LIONS.txt'
@@ -2009,52 +2019,12 @@ def parse_global_LIONS():
             data.append(row)
     return datasets
 
-
 def create_complete_lions_dictionary():
-
-
-# Last thing is the stuff in lions global_LIONS.txt
-def find_Info():
-    """Extracts fields from the LIONS database for testing purposes"""
-
-    # Replace this string with the path to your data
-    fileName = "E:/CS506DataDump/ProjectDump/FY2018/DISK01/gs_case.txt"
-    case_file = open(fileName, 'r')
-
-    cap = 100
-    d = {}
-    count = 0
-
-    for line in case_file:
-        # Field value (change the slice based on the README)
-        val = line[157:182]
-        if val in d:
-            d[val] += 1
-        else:
-            d[val] = 1
-
-
-        # Utilities
-        count += 1
-        if (count % 100000 == 0):
-            print("Reached iteration " + str(count))
-        # Comment out the below lines to not use a cap and go through whole file
-        cap -= 1
-        if cap == 0:
-            break
-
-    print(d)
-    print("Number of lines: " + str(count))
-    print("Number of keys: " + str(len(d)))
-
+    lions = {}
+    lions['GS_ALSO_KNOWN'] = gs_also_known()
+    lions['GS_ARCHIVE_CASE'] = gs_archive_case()
+    return lions
 
 if __name__ == '__main__':
-    case = gs_case()
-    archive_case = gs_archive_case()
-    districts = [d['DISTRICT'] for d in archive_case]
-    print(case[0])
-    print(archive_case[0])
-    print("Length of gs_case:", len(case))
-    print("Length of gs_archive_case:", len(archive_case))
-    print(set(districts))
+    lions = create_complete_lions_dictionary()
 

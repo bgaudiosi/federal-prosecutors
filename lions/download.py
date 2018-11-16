@@ -8,7 +8,7 @@ _DOJ_BASE_LINK = "https://www.justice.gov"
 _DOJ_FOIA_LINK = "https://www.justice.gov/usao/resources/foia-library/national-caseload-data"
 
 
-live = False
+live = True
 def get_most_recent_link():
     global _DOJ_BASE_LINK
     global _DOJ_FOIA_LINK
@@ -57,7 +57,7 @@ def get_zip_links(link_to_zips):
     return links
 
 
-def download_files(select=None, wait_time=30):
+def download_files(select=None, wait_time=30, download_dir="data"):
     link_to_zips = get_most_recent_link()
     zip_links = get_zip_links(link_to_zips)
     if select == None:
@@ -69,7 +69,7 @@ def download_files(select=None, wait_time=30):
         if i >= len(zip_links) or i < 0:
             raise RuntimeError("Invalid download index " + str(i))
         r = requests.get(zip_links[i])
-        filename = "data/DISK" + str(i+1).zfill(2) + ".zip"
+        filename = download_dir + "/DISK" + str(i+1).zfill(2) + ".zip"
         f = open(filename, 'wb')
         f.write(r.content)
         f.close()
@@ -86,9 +86,11 @@ def download_files(select=None, wait_time=30):
 
 
 def unzip_files(files, extract_dir="data"):
+    print("Unzipping files!")
     for f in files:
+        print("Unzipping", f, "...")
         zip_ref = zipfile.ZipFile(f, 'r')
-        zip_ref.extractall("data")
+        zip_ref.extractall(extract_dir)
         zip_ref.close()
 
 if __name__ == "__main__":
