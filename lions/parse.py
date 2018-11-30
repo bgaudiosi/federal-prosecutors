@@ -201,7 +201,7 @@ def gs_archive_part():
                 'DISP_REASON': 'GS_DISP_REAS_TYPE(CODE)'
             },
             'types': {
-                'DISTRICT':'VARCHAR(10)'
+                'DISTRICT':'VARCHAR(10)',
                 'CASEID': v(10),
                 'ID': v(10),
                 'LAST_NAME': v(60),
@@ -299,7 +299,7 @@ def gs_case():
                 'ADR_MODE': v(2),
                 'COLLECT_IND': v(1),
                 'OFFENSE_FROM': d,
-                'OFFENSE_TO':, d,
+                'OFFENSE_TO': d,
                 'LEAD_CHARGE': v(25),
                 'PHYSICAL_LOC': v(20),
                 'STORE_NUM': v(20),
@@ -830,8 +830,8 @@ def gs_relate_case():
             'primary': ['ID', 'CASEID1', 'CASEID2', 'DISTRICT'],
             'foreign':{
                 'CASEID1, DISTRICT': 'GS_CASE(ID, DISTRICT)',
-                'CASEID2, DISTRICT': 'GS_CASE(ID, DISTRICT)'
-                'DISTRICT': 'GS_DISTRICT'
+                'CASEID2, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
             },
             'types': {
                 'DISTRICT': v(10),
@@ -1344,7 +1344,7 @@ def gs_prop_value():
             'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
             'foreign':{
                 'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
-                'PARTID', 'CASEID', 'DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
                 'DISTRICT': 'GS_DISTRICT(DISTRICT)',
                 'TYPE, DISTRICT': 'GS_PROP_VALUE_TYPE(CODE, DISTRICT)'
             },
@@ -2198,7 +2198,7 @@ def gs_agent():
             'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
             'foreign':{
                 'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
-                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)'
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
                 'DISTRICT': 'GS_DISTRICT(DISTRICT)'
             },
             'types': {
@@ -2262,7 +2262,7 @@ def gs_part_court():
                 'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
                 'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
                 'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
-                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
                 #'APPEAL_ROLE': , FIND THIS LATER
                 'DISPOSITION': 'GS_DISP_TYPE(CODE)',
                 'DISP_REASON': 'GS_DISP_REAS_TYPE(CODE)'
@@ -2502,7 +2502,7 @@ def gs_relief():
                 'LIABILITY': v(1),
                 'AMOUNT': 'FLOAT',
                 'NONMONETARY': v(30),
-                'AGENCY': v(4)
+                'AGENCY': v(4),
                 'CREATE_DATE':'DATE',
                 'CREATE_USER':'VARCHAR(30)',
                 'UPDATE_DATE':'DATE',
@@ -2547,7 +2547,7 @@ def gs_triggerlock():
             'foreign':{
                 'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
                 'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
-                'GS_DISTRICT(DISTRICT)'
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
             },
             'types': {
                 'DISTRICT': v(10),
@@ -2565,7 +2565,7 @@ def gs_triggerlock():
                 'TRIGGERLOCK_DEF': v(1),
                 'BAILEY_SENTENCE_CHANGE': v(1),
                 'SENTENCE_PRIOR_BAILEY': n,
-                'ARMED_CAREER_CRIMINAL': v(1)
+                'ARMED_CAREER_CRIMINAL': v(1),
                 'CREATE_DATE':'DATE',
                 'CREATE_USER':'VARCHAR(30)',
                 'UPDATE_DATE':'DATE',
@@ -2610,7 +2610,7 @@ def gs_comment():
     sql = {
             'primary': ['ID1', 'ID2', 'CASEID', 'CATEGORY', 'DISTRICT'],
             'foreign':{
-                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)'
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
                 'CATEGORY': 'GS_COMMENT_CAT(CODE)',
                 'DISTRICT': 'GS_DISTRICT(DISTRICT)'
             },
@@ -2722,7 +2722,7 @@ def gs_staff():
                 'USERNAME': v(18),
                 'INITIALS': v(8),
                 'INIT_STAT': v(1),
-                'STAFF_TITLE': v(3)
+                'STAFF_TITLE': v(3),
                 'SALUTATION': v(8),
                 'LAST_NAME': v(30),
                 'FIRST_NAME': v(30),
@@ -2847,7 +2847,7 @@ def gs_agency_off():
     sql = {
             'primary': ['ID', 'DISTRICT'],
             'foreign':{
-                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
                 'AGENCY': 'GS_AGENCY(CODE)',
                 'STATE': 'GS_STATE(CODE)'
             },
@@ -3362,7 +3362,7 @@ def gs_expert():
     sql = {
             'primary': ['ID', 'DISTRICT'],
             'foreign':{
-                'DISTRICT': 'GS_DISTRICT(DISTRICT)',,
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
                 'INIT_STAT': 'GS_INIT_STAT(CODE)',
                 'TYPE, DISTRICT': 'GS_EXPERT_TYPE(CODE, DISTRICT)',
                 'STATE': 'GS_STATE(CODE)'
@@ -4318,9 +4318,10 @@ def parse_global_LIONS():
                 'not_null': [
                     'CODE'
                 ]
+            },
             'GS_APPEAL_TYPE': {
 
-            },
+            }
 
     }
     count = 0
