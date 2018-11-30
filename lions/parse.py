@@ -8,6 +8,10 @@ import re
 from itertools import groupby
 
 DIR = "data/"
+n='INTEGER'
+def v(x):
+    return 'VARCHAR(' + str(x) + ')'
+d = 'DATE'
 
 def get_district_list():
     districts = ["AK", "ALM", "ALN", "ALS", "ARE", \
@@ -39,12 +43,32 @@ def gs_also_known():
     data = []
     sql = {
             'primary': ['ID', 'CASE_ID', 'PART_ID', 'DISTRICT'],
-            'foreign':[
-               'DISTRICT REFERENCES GS_DISTRICT(DISTRICT)'
-               'CASEID REFERENCES GS_CASE(ID)',
-               'PART_ID REFERENCES GS_PARTICPANT(ID)',
-             ]
-           }
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'CASE_ID,DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PART_ID, CASE_ID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT':'VARCHAR(10)',
+                'CASE_ID':'VARCHAR(10)',
+                'PART_ID':'INTEGER',
+                'ID':'INTEGER',
+                'LAST_NAME':'VARCHAR(60)',
+                'FIRST_NAME':'VARCHAR(60)',
+                'LAST_SOUNDS':'VARCHAR(4)',
+                'FIRST_SOUNDS':'VARCHAR(4)',
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASE_ID',
+                'PART_ID',
+                'ID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -61,12 +85,69 @@ def gs_also_known():
             row['UPDATE_DATE'] = line[179:190]
             row['UPDATE_USER'] = line[190:220]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_archive_case():
     global DIR
     filename = DIR + 'gs_archive_case.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'CLASS': 'GS_CASE_CLASS(CODE)',
+                'US_ROLE': 'GS_US_ROLE(CODE)',
+                'PROG_CAT': 'GS_PROG_CAT(CODE)',
+                'CAUSE_ACT': 'GS_CAUSE_ACT(CODE)',
+                'COURT': 'GS_COURT(CODE)',
+                'DISPOSITION': 'GS_DISP_TYPE(CODE)',
+                'DISP_REASON': 'GS_DISP_REAS_TYPE(CODE)',
+                'INST_TYPE': 'GS_INST_TYPE(CODE)',
+                'AGENCY': 'GS_AGENCY(CODE)'
+            },
+            'types': {
+                'DISTRICT': 'VARCHAR(10)',
+                'ID':'VARCHAR(10)',
+                'CLASS':'VARCHAR(1)',
+                'NAME': 'VARCHAR(50)',
+                'RECVD_DATE':'DATE',
+                'US_ROLE': 'VARCHAR(2)',
+                'LEAD_CHARGE': 'VARCHAR(25)',
+                'PROG_CAT': 'VARCHAR(3)',
+                'CAUSE_ACT': 'VARCHAR(4)',
+                'BRANCH':'VARCHAR(3)',
+                'COMMENTS':'VARCHAR(60)',
+                'COURT':'VARCHAR(2)',
+                'LOCATION':'VARCHAR(2)',
+                'COURT_NUMBER':'VARCHAR(25)',
+                'FILING_DATE': 'DATE',
+                'SERVICE_DATE':'DATE',
+                'DISPOSITION': 'VARCHAR(2)',
+                'DISP_REASON':'VARCHAR(4)',
+                'DISP_DATE':'DATE',
+                'INST_TYPE':'VARCHAR(2)',
+                'INST_FILE_DATE':'DATE',
+                'AUSA_LAST_NAME':'VARCHAR(30)',
+                'AUSA_FIRST_NAME':'VARCHAR(30)',
+                'AGENCY':'VARCHAR(4)',
+                'APPEALS_FILED':'INTEGER',
+                'STORE_NUM':'VARCHAR(20)',
+                'DEST_DATE':'DATE',
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null':[
+                'DISTRICT',
+                'ID',
+                'CLASS',
+                'RECVD_DATE',
+                'DISPOSITION',
+                'DISP_DATE',
+                'AGENCY'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -102,7 +183,7 @@ def gs_archive_case():
             row['UPDATE_DATE'] = line[407:418]
             row['UDPATE_USER'] = line[418:448]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_archive_part():
@@ -110,6 +191,41 @@ def gs_archive_part():
     disk = "DISK01"
     filename = DIR + 'gs_archive_part.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT':'GS_CASE(ID, DISTRICT)',
+                'DISTRICT':'GS_DISTRICT(DISTRICT)',
+                'ROLE': 'GS_ROLE(CODE)',
+                'DISPOSITION': 'GS_DISP_TYPE(CODE)',
+                'DISP_REASON': 'GS_DISP_REAS_TYPE(CODE)'
+            },
+            'types': {
+                'DISTRICT':'VARCHAR(10)'
+                'CASEID': v(10),
+                'ID': v(10),
+                'LAST_NAME': v(60),
+                'FIRST_NAME': v(30),
+                'LAST_SOUNDS': v(4),
+                'FIRST_SOUNDS': v(4),
+                'ROLE': v(2),
+                'DISPOSITION': v(2),
+                'DISP_REASON': v(4),
+                'DISP_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'LAST_NAME',
+                'LAST_SOUNDS',
+                'ROLE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -129,12 +245,93 @@ def gs_archive_part():
             row['UPDATE_DATE']
             row['UPDATE_USER']
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_case():
     global DIR
     filename = DIR + 'gs_case.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'CLASS': 'GS_CASE_CLASS(CODE)',
+                'SECURITY, DISTRICT': 'GS_SECURITY(CODE, DISTRICT)',
+                'PRIORITY': 'GS_PRIORITY(CODE)',
+                'TYPE, DISTRICT': 'GS_CASE_TYPE(CODE, DISTRICT)',
+                'US_ROLE': 'GS_US_ROLE(CODE)',
+                'LIT_RESP': 'GS_LIT_RESP(CODE)',
+                'LIT_TRACK, DISTRICT': 'GS_LIT_TRACK(CODE, DISTRICT)',
+                'WEIGHT, DISTRICT': 'GS_CASE_WEIGHT(CODE, DISTRICT)',
+                'BRANCH, DISTRICT': 'GS_REGION(BRANCH, DISTRICT)',
+                'UNIT, DISTRICT': 'GS_UNIT(CODE, DISTRICT)',
+                'TRIBE': 'GS_TRIBE(CODE)',
+                'RESERVATION, DISTRICT': 'GS_RESERVATION(CODE, DISTRICT)',
+                'SPEC_PROJ': 'GS_SPEC_PROJ(CODE)',
+                'VIC_WIT': 'GS_VICTIM_WIT(CODE)',
+                'ADR_MODE': 'GS_ADR_MODE(CODE)',
+                'COLLECT_IND': 'GS_COLLECT_IND(CODE)',
+                #'LEAD_CHARGE': '',
+                'CIVIL_POTEN': 'GS_CIVIL_POTEN(CODE)',
+                'STATUS': 'GS_CASE_STATUS(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(3),
+                'ID': v(10),
+                'CLASS': v(1),
+                'NAME': v(50),
+                'RECVD_DATE': d,
+                'SECURITY': v(1),
+                'PRIORITY': v(1),
+                'TYPE': v(4),
+                'US_ROLE': v(2),
+                'LIT_RESP': v(2),
+                'LIT_TRACK': v(1),
+                'WEIGHT': v(2),
+                'BRANCH': v(3),
+                'GRAND_JURY_NUM': v(15),
+                'UNIT': v(4),
+                'DCMNS_NUMBER': v(11),
+                'TRIBE': v(4),
+                'RESERVATION': v(4),
+                'SPEC_PROJ': v(2),
+                'VIC_WIT': v(1),
+                'ADR_MODE': v(2),
+                'COLLECT_IND': v(1),
+                'OFFENSE_FROM': d,
+                'OFFENSE_TO':, d,
+                'LEAD_CHARGE': v(25),
+                'PHYSICAL_LOC': v(20),
+                'STORE_NUM': v(20),
+                'CIVL_POTEN': 1,
+                'SYS_INIT_DATE': d,
+                'ACCESS_DATE': d,
+                'STATUS': v(1),
+                'CLOSE_DATE': d,
+                'DEST_DATE': d,
+                'PERMANENT': v(1),
+                'CASE_RESTRICTED': v(1),
+                'CRIMINAL_POTEN': v(1),
+                'TOT_VICTIMS': n,
+                'RELATED_FLU_FLAG': v(1),
+                'QUI_TAM': v(1),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID',
+                'CLASS',
+                'RECVD_DATE',
+                'LIT_RESP',
+                'BRANCH',
+                'SYS_INIT_DATE',
+                'ACCESS_DATE',
+                'STATUS'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -182,12 +379,37 @@ def gs_case():
             row['UPDATE_DATE'] = line[325:336]
             row['UPDATE_USER'] = line[336:337]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_case_cause_act():
     global DIR
     filename = DIR + 'gs_case_cause_act.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'CAUSE_ACT', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CAUSE_ACT': 'GS_CAUSE_ACT(CODE)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'CAUSE_ACT': v(4),
+                'ID': n,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'CAUSE_ACT',
+                'ID'
+            ]
+
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -200,12 +422,37 @@ def gs_case_cause_act():
             row['UPDATE_DATE'] = line[75:86]
             row['UPDATE_USER'] = line[86:116]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_case_doj_div():
     global DIR
     filename = DIR + 'gs_case_doj_div.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'DOJ_DIV': 'GS_DOJ_DIVISION(CODE)',
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID': n,
+                'DOJ_DIV': v(4),
+                'DOJ_NUMBER': v(25),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'DOJ_DIV'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -219,12 +466,36 @@ def gs_case_doj_div():
             row['UPDATE_DATE'] = line[100:111]
             row['UPDATE_USER'] = line[11:141]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_case_dom_terr_ind():
     global DIR
     filename = DIR + 'gs_case_dom_terr_ind.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'DOM_TERR_IND': 'GS_DOM_TERR_IND(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'ID': v(10),
+                'CASEID': n,
+                'DOM_TERR_IND': v(2),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID',
+                'CASEID',
+                'DOM_TERR_IND'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -237,12 +508,36 @@ def gs_case_dom_terr_ind():
             row['UPDATE_DATE'] = line[73:84]
             row['UPDATE_USER'] = line[84:114]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_case_prog_cat():
     global DIR
     filename = DIR + 'gs_case_prog_cat.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PROG_CAT', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PROG_CAT': 'GS_PROG_CAT(CODE)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PROG_CAT': v(3),
+                'ID': n,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PROG_CAT',
+                'ID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -255,13 +550,36 @@ def gs_case_prog_cat():
             row['UPDATE_DATE'] = line[74:85]
             row['UPDATE_USER'] = line[85:115]
             data.append(row)
-    return data
+    return (sql, data)
 
 # Parse DISK02
 def gs_case_special_proj():
     global DIR
     filename = DIR + 'gs_case_special_proj.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID,DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'ID': n,
+                'CASEID': v(1),
+                'SPECIAL_PROJ': v(2),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID',
+                'CASEID',
+                'SPECIAL_PROJ'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -274,12 +592,46 @@ def gs_case_special_proj():
             row['UPDATE_DATE'] = line[73:84]
             row['UPDATE_USER'] = line[84:114]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_evidence():
     global DIR
     filename = DIR + 'gs_evidence.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID,DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'LOCATION, DISTRICT': 'GS_EVID_LOCATION(CODE, DISTRICT)',
+                'TYPE, DISTRICT': 'GS_EVID_TYPE(CODE, DISTRICT)',
+                'DISPOSITION, DISTRICT': 'GS_EVID_DISP(CODE, DISTRICT)',
+
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID': n,
+                'LOCATION': v(4),
+                'TYPE': v(2),
+                'DISPOSITION': v(1),
+                'STORE_DATE': d,
+                'DISP_DATE': d,
+                'DC_EXHIBIT_NUM': v(25),
+                'GJ_EXHIBIT_NUM': v(25),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'LOCATION',
+                'TYPE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -298,12 +650,39 @@ def gs_evidence():
             row['UPDATED_DATE'] = line[150:161]
             row['UPDATE_USER'] = line[161:191]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_expert_case():
     global DIR
     filename = DIR + 'gs_expert_case.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'EXP_SIDE': 'GS_EXPERT_SIDE(CODE)',
+                'EXPERTID, DISTRICT': 'GS_EXPERT(ID, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID': n,
+                'EXP_SIDE': v(1),
+                'EXPERTID': n,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'EXP_SIDE',
+                'EXPERTID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -317,12 +696,47 @@ def gs_expert_case():
             row['UPDATED_DATE'] = line[82:93]
             row['UPDATE_USER'] = line[93:123]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_inst_charge():
     global DIR
     filename = DIR + 'gs_inst_charge.txt'
     data = []
+    sql = {
+            'primary': ['CASEID', 'CRTHISID', 'INSTID', 'CHARGE', 'CATEGORY', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'INSTID, CASEID, CRTHISID, DISTRICT': 'GS_INSTRUMENT(ID, CASEID, CRTHISID, DISTRICT)',
+                'CHARGE': 'GS_CHARGE_TYPE(CODE)',
+                'CATEGORY': 'GS_CHARGE_CAT(CODE)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'PENT_PROV': 'GS_PENALTY_PROVISION(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'CRTHISID': n,
+                'INSTID': n,
+                'CHARGE': v(25),
+                'CATEGORY': v(1),
+                'PENT_PROV': v(25),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)',
+                'ID': n
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'CRTHISID',
+                'INSTID',
+                'CHARGE',
+                'CATEGORY',
+                'ID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -339,12 +753,49 @@ def gs_inst_charge():
             row['UPDATE_USER'] = line[143:173]
             row['ID'] = line[173:183]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_part_victim():
     global DIR
     filename = DIR + 'gs_part_victim.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'VICTIM_TYPE': 'GS_VICTIM_TYPE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'ID': n,
+                'VICTIM_TYPE': v(1),
+                'PROSECUTION': v(1),
+                'VICTIM_TIMES': n,
+                'THREATS': v(1),
+                'ELDERLY': v(1),
+                'VICTIM_IDENTIFIER': v(25),
+                'STATE_COMP_RECVD': 'FLOAT',
+                'SERVICES_REQUESTED': v(1),
+                'VIOLENT_CRIME': v(1),
+                'DISABILITY': v(1),
+                'NOTIFICAT_REQSTD': v(1),
+                'NOTIFICAT_RECVD': v(1),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'ID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -369,20 +820,48 @@ def gs_part_victim():
             row['UPDATED_DATE'] = line[140:151]
             row['UPDATE_USER'] = line[151:181]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_relate_case():
     global DIR
     filename = DIR + 'gs_relate_case.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID1', 'CASEID2', 'DISTRICT'],
+            'foreign':{
+                'CASEID1, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CASEID2, DISTRICT': 'GS_CASE(ID, DISTRICT)'
+                'DISTRICT': 'GS_DISTRICT'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID1': v(10),
+                'CASEID2': v(10),
+                'CRTHISID1': n,
+                'CRTHISID2': n,
+                'REASON': v(2),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)',
+                'ID': 'FLOAT'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID1',
+                'CASEID2',
+                'REASON',
+                'ID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
             row['DISTRICT'] = line[0:10]
             row['CASEID1'] = line[10:20]
             row['CASEID2'] = line[20:30]
-            row['CRTHISD1'] = line[30:40]
-            row['CRTHISD2'] = line[40:50]
+            row['CRTHISID1'] = line[30:40]
+            row['CRTHISID2'] = line[40:50]
             row['REASON'] = line[50:52]
             row['CREATE_DATE'] = line[52:63]
             row['CREATE_USER'] = line[63:93]
@@ -390,12 +869,40 @@ def gs_relate_case():
             row['UPDATE_USER'] = line[104:134]
             row['ID'] = line[134:144]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_relate_part():
     global DIR
     filename = DIR + 'gs_relate_part.txt'
     data = []
+    sql = {
+            'primary': ['CASEID', 'PARTID1', 'PARTID2', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID1, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'PARTID2, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'REASON, DISTRICT': 'GS_RELATE_PART_REASON(CODE, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID1': n,
+                'PARTID2': n,
+                'REASON': v(2),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID1',
+                'PARTID2',
+                'REASON'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -409,12 +916,47 @@ def gs_relate_part():
             row['UPDATED_DATE'] = line[83:94]
             row['UPDATE_USER'] = line[94:125]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_cont_services():
     global DIR
     filename = DIR + 'gs_cont_services.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'CONTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'CONTID, CASEID, PARTID, DISTRICT': 'GS_CONTACT_LOG(ID, CASEID, PARTID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'SERV_AGENCY, DISTRICT': 'GS_SERV_AGENCY(ID, DISTRICT)',
+                'SERV_TYPE, DISTRICT': 'GS_SERV_TYPE(CODE, DISTRICT)',
+                'SERV_AGENCY, SERV_LANGUAGE, DISTRICT': 'GS_SERV_LANGUAGE(SERV_AGENCY, SERV_LANGUAGE, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'CONTID': n,
+                'ID': n,
+                'SERV_AGENCY': n,
+                'SERV_TYPE': v(4),
+                'SERV_LANGUAGE': v(3),
+                'SERV_SPECIAL': v(4),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'CONTID',
+                'ID',
+                'SERV_AGENCY'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -438,6 +980,45 @@ def gs_contact_log():
     global DIR
     filename = DIR + 'gs_contact_log.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'PURPOSE, DISTRICT': 'GS_CONTACT_PURP(CODE, DISTRICT)',
+                'TYPE, DISTRICT': 'GS_CONTACT_TYPE(CODE, DISTRICT)',
+                'INITIATOR': 'GS_INIATOR(CODE)',
+                'STAFFID, DISTRICT': 'GS_STAFF(ID, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'ID': n,
+                'CONT_DATE': d,
+                'PURPOSE': v(2),
+                'TYPE': v(2),
+                'INITIATOR': v(2),
+                'STAFFID': n,
+                'DOC_CODE': v(3),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'ID',
+                'CONT_DATE',
+                'PURPOSE',
+                'TYPE',
+                'INITIATOR',
+                'STAFFID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -462,6 +1043,34 @@ def gs_control_sub():
     global DIR
     filename = DIR + 'gs_control_sub.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'TYPE': 'GS_CONTROL_TYPE(CODE)',
+                'MEASURE': 'GS_MEASURE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID': n,
+                'TYPE': v(1),
+                'QUANTITY': 'FLOAT',
+                'MEASURE': v(1),
+                'OTHER_DESCRIP': v(30),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'TYPE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -483,16 +1092,49 @@ def gs_count():
     global DIR
     filename = DIR + 'gs_count.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'CRTHISID', 'INSTID', 'CHARGE', 'CATEGORY', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'INSTID': 'GS_INSTRUMENT(ID, CASEID, CRTHISID, DISTRICT)',
+                'CHARGE' : 'GS_CHARGE_TYPE(CODE)',
+                'CATEGORY': 'GS_CHARGE_CAT(CODE)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'CRTHISID': n,
+                'INSTID': n,
+                'CHARGE': v(25),
+                'CATEGORY': v(1),
+                'ID': n,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'CRTHISID',
+                'INSTID',
+                'CHARGE',
+                'CATEGORY',
+                'ID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
             row['DISTRICT'] = line[0:10]
             row['CASEID'] = line[10:20]
-            row['ID'] = line[20:30]
-            row['TYPE'] = line[30:31]
-            row['QUANTITY'] = line[31:45]
-            row['MEASURE'] = line[45:46]
-            row['OTHER_DESCRIP'] = line[46:76]
+            row['CRTHISID'] = line[20:30]
+            row['INSTID'] = line[30:40]
+            row['CHARGE'] = line[41:65]
+            row['CATEGORY'] = line[65:66]
+            row['ID'] = line[66:76]
             row['CREATE_DATE'] = line[76:87]
             row['CREATE_USER'] = line[87:117]
             row['UPDATED_DATE'] = line[117:128]
@@ -506,6 +1148,54 @@ def gs_court_hist():
     global DIR
     filename = DIR + 'gs_court_hist.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'COURT': 'GS_COURT(CODE)',
+                'LOCATION, DISTRICT': 'GS_LOCATION(CODE, DISTRICT)',
+                'US_ROLE': 'GS_US_ROLE(CODE)',
+                'APPEAL_TYPE': 'GS_APPEAL_TYPE(CODE)',
+                'DISPOSITION': 'GS_DISP_TYPE(CODE)',
+                'DISP_REASON1': 'GS_DISP_REAS_TYPE(CODE)',
+                'DISP_REASON2': 'GS_DISP_REAS_TYPE(CODE)',
+                'DISP_REASON3': 'GS_DISP_REAS_TYPE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID': n,
+                'COURT': v(2),
+                'LOCATION': v(2),
+                'US_ROLE': v(2),
+                'COURT_NUMBER': v(25),
+                'FILING_DATE': d,
+                'SERVICE_DATE': d,
+                'TRIAL_DAYS': 'FLOAT',
+                'NOAP_DATE': d,
+                'APPEAL_TYPE': v(1),
+                'SENT_APPEAL': v(1),
+                'DISPOSITION': v(2),
+                'DISP_DATE': d,
+                'DISP_REASON1': v(4),
+                'DISP_REASON2': v(4),
+                'DISP_REASON3': v(4),
+                'SYS_DISP_DATE': d,
+                'SYS_FILING_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'COURT',
+                'US_ROLE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -540,6 +1230,35 @@ def gs_court_judge():
     global DIR
     filename = DIR + 'gs_court_judge.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'CRTHISID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'JUDGEID, DISTRICT': 'GS_JUDGE(ID, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'CRTHISID': n,
+                'ID': n,
+                'JUDGEID': n,
+                'DECISION': v(4),
+                'START_DATE': d,
+                'END_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'CRTHISID',
+                'ID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -562,6 +1281,38 @@ def gs_dna():
     global DIR
     filename = DIR + 'gs_dna.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(3),
+                'ID': n,
+                'CASEID': v(10),
+                'PROCEEDINGS_AFT_RELIEF_GRANTED': v(1),
+                'NEW_TRIAL_ORD': v(1),
+                'CHARGE_DISMISSED': v(1),
+                'GUILTY_PLEA_ENTERED': v(1),
+                'FOUND_GUILTY': v(1),
+                'ACQUITTED': v(1),
+                'RESENTENCING_CAP_CASE': v(1),
+                'TESTINGS_ORDERED': v(1),
+                'RELIEF_GRANTED': v(1),
+                'COMMENTS': v(1),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID',
+                'CASEID',
+                'PROCEEDINGS_AFT_RELIEF_GRANTED'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -589,6 +1340,36 @@ def gs_prop_value():
     global DIR
     filename = DIR + 'gs_prop_value.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID', 'CASEID', 'DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'TYPE, DISTRICT': 'GS_PROP_VALUE_TYPE(CODE, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(1),
+                'PARTID': n,
+                'ID': n,
+                'TYPE': v(2),
+                'VALUE': 'FLOAT',
+                'PROP_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'ID',
+                'TYPE',
+                'VALUE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -610,6 +1391,26 @@ def gs_region():
     global DIR
     filename = DIR + 'gs_region.txt'
     data = []
+    sql = {
+            'primary': ['BRANCH', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(3),
+                'BRANCH': v(3),
+                'DESCRIPTION': v(3),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'BRANCH',
+                'DESCRIPTION'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -627,6 +1428,37 @@ def gs_relate_appeal():
     global DIR
     filename = DIR + 'gs_relate_appeal.txt'
     data = []
+    sql = {
+            'primary': ['CASEID1', 'CRTHISID1', 'CASEID2', 'CRTHISID2', 'REASON', 'DISTRICT'],
+            'foreign':{
+                'CASEID1, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID1, CASEID1, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'CASEID2, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID2, CASEID2, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'REASON, DISTRICT': 'GS_RELATE_CASE_REASON(CODE, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID1': v(10),
+                'CRTHISID1': n,
+                'CASEID2': v(10),
+                'CRTHISID2': n,
+                'REASON': v(2),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID1',
+                'CRTHISID1',
+                'CASEID2',
+                'CRTHISID2',
+                'REASON'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -648,6 +1480,61 @@ def gs_sentence():
     global DIR
     filename = DIR + 'gs_sentence.txt'
     data = []
+    sql = {
+            'primary': ['CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'GUIDE_DEPART': 'GS_GUIDE_DEPART(CODE)',
+                'INCAR_TYPE': 'GS_INCAR_TYPE(CODE)',
+                'JUDGEID, DISTRICT': 'GS_JUDGE(ID, DISTRICT)',
+                'SPEC_CONDITION': 'GS_SPECIAL_CONDITION(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'SENT_DATE': d,
+                'GUIDE_DEPART': v(1),
+                'INCAR_TYPE': v(3),
+                'JUDGEID': v(10),
+                'PROB_DAYS': n,
+                'PROB_MONTHS': n,
+                'PROB_YEARS': n,
+                'SUPER_REL_DAYS': n,
+                'SUPER_REL_MONTHS': n,
+                'SUPER_REL_YEARS': n,
+                'INCAR_DAYS': n,
+                'INCAR_MONTHS': n,
+                'INCAR_YEARS': n,
+                'FINE': 'FLOAT',
+                'SPEC_ASSESSMENT': 'FLOAT',
+                'DISBARRED': v(1),
+                'SPEC_CONDITION': v(4),
+                'PROBATION_REVOKED': v(1),
+                'SUPER_REL_REVOKED': v(1),
+                'TOTAL_REVOKED_DAYS': n,
+                'TOTAL_REVOKED_MONTHS': n,
+                'TOTAL_REVOKED_YEARS': n,
+                'RELATED_FLU_USAO': v(10),
+                'RELATED_FLU_SEQ': v(3),
+                'COMM_SERV_HOURS': 'FLOAT',
+                'SYS_SENT_DATE': d,
+                'RESITUTION_AMT': 'FLOAT',
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)',
+                'SUPV_REL_INCAR_TYPE': v(1)
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'SENT_DATE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -692,10 +1579,48 @@ def gs_sentence():
 # they split it up by district
 def gs_event():
     global DIR
-
     districts = get_district_list()
-
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'CRTHISID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'TYPE, DISTRICT': 'GS_EVENT_TYPE(CODE, DISTRICT)',
+                'ACTION, DISTRICT': 'GS_ACTION(CODE, DISTRICT)',
+                'JUDGEID': 'GS_JUDGE(ID, DISTRICT)',
+                'STAFFID, DISTRICT': 'GS_STAFF(ID, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'CRTHISID': n,
+                'ID': n,
+                'TYPE': v(4),
+                'ACTION': v(2),
+                'EVENT_DATE': d,
+                'SCHED_DATE': d,
+                'SCHED_TIME': d,
+                'SCHED_LOC': v(200),
+                'STAFFID': n,
+                'JUDGEID': n,
+                'DOCUMENT_CODE': v(3),
+                'DOCUMENT_STAFFID': n,
+                'DOCUMENT_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'CRTHISID',
+                'ID',
+                'TYPE'
+            ]
+    }
     for district in districts:
         filename = DIR + 'gs_event_' + district + '.txt'
         with open(filename) as file:
@@ -728,6 +1653,37 @@ def gs_oppose_coun():
     global DIR
     filename = DIR + 'gs_oppose_coun.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'ATTORNEYID, DISTRICT': 'GS_OPPOSE_ATTORN(ID, DISTRICT)',
+                'TYPE, DISTRICT': 'GS_COUNSEL_TYPE(CODE, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'ID': n,
+                'ATTORNEYID': n,
+                'TYPE': v(2),
+                'START_DATE': d,
+                'END_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'ID',
+                'ATTORNEYID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -750,6 +1706,41 @@ def gs_restitution():
     global DIR
     filename = DIR + 'gs_restitution.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT',
+                'TYPE': 'GS_REST_TYPE(CODE)',
+                'RECIPIENT': 'GS_REST_RECIPIENT(CODE)',
+                'LIABILITY': 'GS_RELIEF_LIABILITY(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'ID': n,
+                'VICTIMID': n,
+                'TYPE': v(1),
+                'RECIPENT': v(1),
+                'AMOUNT': 'FLOAT',
+                'LIABILITY': v(1),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'ID',
+                'TYPE',
+                'RECIPIENT',
+                'AMOUNT'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -774,6 +1765,117 @@ def gs_participant():
 
     districts = get_district_list()
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT',
+                'TYPE': 'GS_PART_TYPE(CODE)',
+                'ROLE': 'GS_ROLE(CODE)',
+                'SECURITY, DISTRICT': 'GS_SECURITY(CODE, DISTRICT)',
+                'BUSINESS_TYPE, DISTRICT': 'GS_BUSINESS_TYPE(CODE, DISTRICT)',
+                'PROP_TYPE, DISTRICT': 'GS_PROP_TYPE(CODE, DISTRICT)',
+                'AGENCY': 'GS_AGENCY(CODE)',
+                'JOB_POSITION, DISTRICT': 'GS_JOB_POSITION(CODE, DISTRICT)',
+                'GENDER': 'GS_GENDER(CODE)',
+                'RACE': 'GS_RACE(CODE)',
+                'IMMIG_STAT, DISTRICT': 'GS_IMMIG_STAT(CODE, DISTRICT)',
+                'COUNTRY': 'GS_COUNTRY_CIT(CODE)',
+                'TRIBE': 'GS_TRIBE(CODE)',
+                'RESERVATION, DISTRICT': 'GS_RESERVATION(CODE, DISTRICT)',
+                'HOME_STATE': 'GS_STATE(CODE)',
+                'OFF_STATE': 'GS_STATE(CODE)',
+                'AGCYOFFID, DISTRICT': 'GS_AGENCY_OFF(ID, DISTRIC)',
+                'EMPLOYER_TYPE': 'GS_EMPLOYER_TYPE(CODE)',
+                'HCARE_BUSN_TYPE': 'GS_HCARE_BUSN_TYPE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID': n,
+                'TYPE': v(1),
+                'ROLE': v(2),
+                'SECURITY': v(1),
+                'DEFEND_NUM': n,
+                'SALUTATION': v(20),
+                'LAST_NAME': v(60),
+                'FIRST_NAME': v(30),
+                'TITLE': v(30),
+                'LAST_SOUNDS': v(4),
+                'FIRST_SOUNDS': v(4),
+                'BUSINESS_TYPE': v(2),
+                'EIN': v(20),
+                'PROP_TYPE': v(2),
+                'TOTAL_TRACTS': n,
+                'CATS_ASSET_ID': v(15),
+                'AGENCY': v(4),
+                'AGENCY_NUM': v(30),
+                'JOB_POSITION': v(4),
+                'SSN': v(11),
+                'BIRTHDATE': d,
+                'GENDER': v(1),
+                'JUVENILE': v(1),
+                'RACE': v(2),
+                'RACE_DESCRIP': v(30),
+                'IMMIG_STAT': v(2),
+                'COUNTRY': v(2),
+                'TRIBE': v(4),
+                'RESERVATION': v(4),
+                'ARREST_DATE': d,
+                'PDID': v(12),
+                'FBI_NUMBER': v(15),
+                'CRIM_HIST': v(1),
+                'EST_LOST': 'FLOAT',
+                'ACT_LOSS': 'FLOAT',
+                'HOME_ADDRESS1': v(30),
+                'HOME_ADDRESS2': v(30),
+                'HOME_ADDRESS3': v(30),
+                'HOME_CITY': v(20),
+                'HOME_STATE': v(2),
+                'HOME_COUNTY': v(20),
+                'HOME_ZIPCODE': v(10),
+                'HOME_PHONE': v(15),
+                'HOME_FAX': v(15),
+                'OFF_ADDRESS1': v(30),
+                'OFF_ADDRESS2': v(30),
+                'OFF_ADDRESS3': v(30),
+                'OFF_CITY': v(20),
+                'OFF_STATE': v(2),
+                'OFF_COUNTY': v(20),
+                'OFF_ZIPCODE': v(10),
+                'OFF_PHONE': v(15),
+                'OFF_FAX': v(15),
+                'MARSHALS_NUM': v(9),
+                'AGCYOFFID': n,
+                'LOWER_CRT_TRIAL_NBR': v(25),
+                'BUSINESS_CONTACT_LNAME': v(30),
+                'BUSINESS_CONTACT_FNAME': v(30),
+                'COLLECT_IND': v(1),
+                'SYS_INIT_DATE': d,
+                'WEIGHT': v(2),
+                'EMPLOYER_NAME': v(40),
+                'EMPLOYER_TYPE': v(3),
+                'EMPLOYER_DESC': v(40),
+                'NPI': v(10),
+                'OCCUPATION': v(3),
+                'OCCUP_DESC': v(60),
+                'HCARE_BUSN_TYPE': v(3),
+                'HCARE_BUSN_DESC': v(40),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'TYPE',
+                'ROLE',
+                'LAST_NAME',
+                'SYS_INIT_DATE'
+            ]
+    }
     for district in districts:
         filename = DIR + 'gs_participant_' + district + '.txt'
         with open(filename) as file:
@@ -859,9 +1961,37 @@ def gs_participant():
 
 def gs_part_event():
     global DIR
-
     districts = get_district_list()
     data = []
+    sql = {
+            'primary': ['CASEID', 'PARTID', 'CRTHISID', 'EVENTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'EVENTID, CASEID, CRTHISID, DISTRICT': 'GS_EVENT(ID, CASEID, CRTHISID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'CRTHISID': n,
+                'EVENTID': n,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'CRTHISID',
+                'EVENTID'
+            ]
+    }
     for district in districts:
         filename = DIR + 'gs_part_event_' + district + '.txt'
         with open(filename) as file:
@@ -883,6 +2013,42 @@ def gs_court_order_disp():
     global DIR
     filename = DIR + 'gs_court_order_disp.txt'
     data = []
+
+    # The keys don't seem right here
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'CODE': 'GS_ORDER_TYPE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(3),
+                'ID': v(10),
+                'CASEID': v(10),
+                'CRTHISID': n,
+                'PARTID': n,
+                'CODE': v(4),
+                'SYSTEM_DATE': d,
+                'DATE_OF_ORDER': d,
+                'LAST_NAME': v(60),
+                'FIRST_NAME': v(30),
+                'COURT': v(4),
+                'COURT_NUMBER': v(25),
+                'PARTID2': n,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID',
+                'CASEID',
+                'CRTHISID',
+                'PARTID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -910,6 +2076,46 @@ def gs_defend_stat():
     global DIR
     filename = DIR + 'gs_defend_stat.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'TYPE': 'GS_DEFEND_STAT_TYPE(CODE)',
+                'CUSTODY_LOC, DISTRICT': 'GS_CUSTODY_LOC(CODE, DISTRICT)',
+                'DETEN_REASON, DISTRICT': 'GS_DETEN_REASON(CODE, DISTRICT)',
+                'BOND_TYPE': 'GS_BOND_TYPE(CODE)',
+                'TERM_REASON': 'GS_TERM_REASON(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'ID': n,
+                'TYPE': v(2),
+                'START_DATE': d,
+                'CUSTODY_LOC': v(2),
+                'DETEN_REASON': v(4),
+                'BOND_TYPE': v(2),
+                'BOND_AMOUNT': 'FLOAT',
+                'BOND_PROVIDER': v(25),
+                'TERM_REASON': v(2),
+                'END_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'ID',
+                'TYPE',
+                'START_DATE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -937,6 +2143,36 @@ def gs_instrument():
     global DIR
     filename = DIR + 'gs_instrument.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'CRTHISID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'TYPE': 'GS_INST_TYPE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'CRTHISID': n,
+                'ID': n,
+                'TYPE': v(2),
+                'FILING_DATE': d,
+                'SYS_FILING_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'CRTHISID',
+                'ID',
+                'TYPE',
+                'FILING_DATE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -958,6 +2194,40 @@ def gs_agent():
     global DIR
     filename = DIR + 'gs_instrument.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)'
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'ID': n,
+                'SALUTATION': v(8),
+                'LAST_NAME': v(30),
+                'FIRST_NAME': v(30),
+                'TITLE': v(30),
+                'PHONE': v(20),
+                'FAX': v(15),
+                'PAGER': v(15),
+                'LEAD_AGENT': v(1),
+                'EMAIL': v(100),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'ID',
+                'LAST_NAME'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -986,6 +2256,41 @@ def gs_part_court():
     global DIR
     filename = DIR + 'gs_part_court.txt'
     data = []
+    sql = {
+            'primary': [],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+                #'APPEAL_ROLE': , FIND THIS LATER
+                'DISPOSITION': 'GS_DISP_TYPE(CODE)',
+                'DISP_REASON': 'GS_DISP_REAS_TYPE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'CRTHISID': n,
+                'APPEAL_ROLE': v(2),
+                'DISPOSITION': v(2),
+                'DISP_REASON': v(4),
+                'DISP_DATE': d,
+                'SYS_DISP_DATE': d,
+                'SYS_INIT_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'CRTHISID',
+                'SYS_INIT_DATE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1011,6 +2316,38 @@ def gs_assignment():
     global DIR
     filename = DIR + 'gs_assignment.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'CRTHISID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT',
+                'STAFFID, DISTRICT': 'GS_STAFF(ID, DISTRICT)',
+                'POSITION, DISTRICT': 'GS_POSITION(CODE, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'CRTHISID': n,
+                'ID': n,
+                'STAFFID': n,
+                'POSITION': v(1),
+                'START_DATE': d,
+                'END_DATE': d,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'CRTHISID',
+                'ID',
+                'STAFFID',
+                'POSITION'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1033,6 +2370,47 @@ def gs_part_count():
     global DIR
     filename = DIR + 'gs_part_count.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'PARTID', 'CRTHISID', 'INSTID', 'CHARGE', 'CATEGORY', 'COUNTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'CRTHISID, CASEID, DISTRICT': 'GS_COURT_HIST(ID, CASEID, DISTRICT)',
+                'INSTID, CASEID, CRTHISID, DISTRICT': 'GS_INSTRUMENT(ID, CASEID, CRTHISID, DISTRICT)',
+                'CHARGE': 'GS_CHARGE_TYPE(CODE)',
+                'CATEGORY': 'GS_CHARGE_CAT(CODE)',
+                'COUNTID, CASEID, CRTHISID, INSTID, CHARGE, CATEGORY, DISTRICT': 'GS_COUNT(ID, CASEID, CRTHISID, INSTID, CHARGE, CATEGORY, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'CRTHISID': n,
+                'INSTID': n,
+                'CHARGE': v(25),
+                'CATEGORY': v(1),
+                'COUNTID': n,
+                'DISPOSITION': v(2),
+                'DISP_REASON': v(4),
+                'DISP_DATE': d,
+                'SEALED': v(1),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'CRTHISID',
+                'INSTID',
+                'CHARGE',
+                'CATEGORY',
+                'COUNTID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1060,6 +2438,31 @@ def gs_part_relief():
     global DIR
     filename = DIR + 'gs_part_relief.txt'
     data = []
+    sql = {
+            'primary': ['CASEID', 'PARTID', 'RELIEFID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'RELIEFID, CASEID, DISTRICT': 'GS_RELIEF(ID, CASEID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'RELIEFID': n,
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID',
+                'RELIEFID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1078,6 +2481,43 @@ def gs_relief():
     global DIR
     filename = DIR + 'gs_relief.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'CASEID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'TYPE': 'GS_RELIEF_TYPE(CODE)',
+                'STAGE': 'GS_RELIEF_STAGE(CODE)',
+                'REQUESTED_BY': 'GS_RELIEF_REQUESTED_BY(CODE)',
+                'LIABILITY': 'GS_RELIEF_LIABILITY(CODE)',
+                'AGENCY': 'GS_AGENCY(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID': n,
+                'TYPE': v(1),
+                'STAGE': v(1),
+                'REQUESTED_BY': v(1),
+                'LIABILITY': v(1),
+                'AMOUNT': 'FLOAT',
+                'NONMONETARY': v(30),
+                'AGENCY': v(4)
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID',
+                'TYPE',
+                'STAGE',
+                'REQUESTED_BY',
+                'AGENCY'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1102,6 +2542,41 @@ def gs_triggerlock():
     global DIR
     filename = DIR + 'gs_triggerlock.txt'
     data = []
+    sql = {
+            'primary': ['CASEID', 'PARTID', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'PARTID, CASEID, DISTRICT': 'GS_PARTICIPANT(ID, CASEID, DISTRICT)',
+                'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'PARTID': n,
+                'BRADY_OFFENSE': v(1),
+                'NOTICE_3_STRIKES': v(1),
+                'DATE_NOTICE_FILED': d,
+                'DATE_NOTICE_WITHDRAWN': d,
+                'WITHDRAWAL_REASON': v(78),
+                'CONVICTION_3_STRIKES': v(1),
+                'LIFE_3_STRIKES': v(1),
+                'NO_LIFE_REASON': v(78),
+                'THIRD_PROSEC_TRIGG_OFFENSE': v(1),
+                'TRIGGERLOCK_DEF': v(1),
+                'BAILEY_SENTENCE_CHANGE': v(1),
+                'SENTENCE_PRIOR_BAILEY': n,
+                'ARMED_CAREER_CRIMINAL': v(1)
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'PARTID'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1132,6 +2607,34 @@ def gs_comment():
     global DIR
     filename = DIR + 'gs_comment.txt'
     data = []
+    sql = {
+            'primary': ['ID1', 'ID2', 'CASEID', 'CATEGORY', 'DISTRICT'],
+            'foreign':{
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)'
+                'CATEGORY': 'GS_COMMENT_CAT(CODE)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'CASEID': v(10),
+                'ID1': n,
+                'ID2': n,
+                'CATEGORY': v(1),
+                'TEXT': v(1),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CASEID',
+                'ID1',
+                'ID2',
+                'CATEGORY',
+                'TEXT'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1153,6 +2656,35 @@ def gs_request():
     global DIR
     filename = DIR + 'gs_request.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'CASEID, DISTRICT': 'GS_CASE(ID, DISTRICT)',
+                'STAFFID, DISTRICT': 'GS_STAFF(ID, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(10),
+                'ID': n,
+                'CASEID': v(10),
+                'STAFFID': n,
+                'REQUEST_DATE': d,
+                'RECEIVE_DATE': d,
+                'RETURN_DATE': d,
+                'STORE_NUM': v(20),
+                'BOXID': v(9),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID',
+                'STAFFID',
+                'REQUEST_DATE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1176,6 +2708,57 @@ def gs_staff():
     global DIR
     filename = DIR + 'gs_staff.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'INIT_STAT': 'GS_INIT_STAT(CODE)',
+                'STAFF_TITLE, DISTRICT': 'GS_STAFF_TILE(CODE, DISTRICT)',
+                'STAFF_SECTION, DISTRICT' : 'GS_STAFF_SECTION(CODE, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(3),
+                'ID': n,
+                'USERNAME': v(18),
+                'INITIALS': v(8),
+                'INIT_STAT': v(1),
+                'STAFF_TITLE': v(3)
+                'SALUTATION': v(8),
+                'LAST_NAME': v(30),
+                'FIRST_NAME': v(30),
+                'OFFICE_LOC': v(30),
+                'PHONE': v(15),
+                'ISSUED_DATE': d,
+                'DEFAULT_DIR': v(40),
+                'DEFAULT_PRINT': v(40),
+                'DEFAULT_DC_LOC': v(2),
+                'DEFAULT_BRANCH': v(3),
+                'NAME_SEARCH': v(1),
+                'STAFF_SEC_TYPE': v(1),
+                'STAFF_SECTION': v(8),
+                'CREATE_DATE': d,
+                'CREATE_USER': v(30),
+                'UPDATE_DATE': d,
+                'UPDATE_USER': v(30),
+                'AD_USERNAME': v(30),
+                'LCMS_POSITION': v(25),
+                'CASE_TYPE': v(10),
+                'ACTION_STAGE': v(10),
+                'DR_USERNAME': v(30),
+                'GUID': v(30)
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID',
+                'USERNAME',
+                'INITIALS',
+                'INIT_STAT',
+                'LAST_NAME',
+                'ISSUED_DATE',
+                'DEFAULT_BRANCH',
+                'STAFF_SEC_TYPE'
+            ]
+    }
     with open(filename) as file:
         for line in file:
             row = {}
@@ -1217,6 +2800,27 @@ def gs_action():
     global DIR
     filename = DIR + 'table_gs_action.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1240,6 +2844,38 @@ def gs_agency_off():
     global DIR
     filename = DIR + 'table_gs_agency_off.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+                'AGENCY': 'GS_AGENCY(CODE)',
+                'STATE': 'GS_STATE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'ID': v(11),
+                'AGENCY': v(4),
+                'OFFICE': v(60),
+                'ADDRESS1': v(30),
+                'ADDRESS2': v(30),
+                'ADDRESS3': v(30),
+                'CITY': v(20),
+                'STATE': v(5),
+                'ZIPCODE': v(10),
+                'SALUTATION': v(10),
+                'CHIEF_LAST_NAME': v(30),
+                'CHIEF_FIRST_NAME': v(30),
+                'CHIEF_TITLE': v(30),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'ID'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1272,6 +2908,27 @@ def gs_business_type():
     global DIR
     filename = DIR + 'table_gs_business_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1295,6 +2952,27 @@ def gs_case_type():
     global DIR
     filename = DIR + 'table_gs_case_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1319,6 +2997,27 @@ def gs_case_weight():
     global DIR
     filename = DIR + 'table_gs_case_weight.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1343,6 +3042,27 @@ def gs_counsel_type():
     global DIR
     filename = DIR + 'table_gs_counsel_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1367,6 +3087,29 @@ def gs_court_loc():
     global DIR
     filename = DIR + 'table_gs_court_loc.txt'
     data = []
+    sql = {
+            'primary': ['COURT', 'LOCATION', 'DISTRICT'],
+            'foreign':{
+                'COURT': 'GS_COURT(CODE)',
+                'LOCATION, DISTRICT': 'GS_LOCATION(CODE, DISTRICT)',
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'COURT': v(4),
+                'LOCATION': v(2),
+                'DESCRIPTION': v(60),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'COURT',
+                'LOCATION',
+                'DISTRICT'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1390,6 +3133,27 @@ def gs_deten_reason():
     global DIR
     filename = DIR + 'table_gs_deten_reason.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1414,6 +3178,27 @@ def gs_event_type():
     global DIR
     filename = DIR + 'table_gs_event_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE'
+                #'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1442,6 +3227,27 @@ def gs_evid_disp():
     global DIR
     filename = DIR + 'table_gs_evid_disp.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1465,6 +3271,27 @@ def gs_evid_location():
     global DIR
     filename = DIR + 'table_gs_evid_location.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1488,6 +3315,27 @@ def gs_evid_type():
     global DIR
     filename = DIR + 'table_gs_evid_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1511,6 +3359,43 @@ def gs_expert():
     global DIR
     filename = DIR + 'table_gs_expert.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',,
+                'INIT_STAT': 'GS_INIT_STAT(CODE)',
+                'TYPE, DISTRICT': 'GS_EXPERT_TYPE(CODE, DISTRICT)',
+                'STATE': 'GS_STATE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'ID': n,
+                'INITIALS': v(8),
+                'INIT_STAT': v(8),
+                'TYPE': v(4),
+                'SSN': v(11),
+                'SALUTATION': v(10),
+                'LAST_NAME': v(30),
+                'FIRST_NAME': v(30),
+                'TITLE': v(20),
+                'ADDRESS_1': v(30),
+                'ADDRESS_2': v(30),
+                'ADDRESS_3': v(30),
+                'CITY': v(20),
+                'STATE': v(5),
+                'ZIPCODE': v(10),
+                'PHONE': v(15),
+                'FAX': v(15),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'ID',
+                'DISTRICT'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1547,6 +3432,27 @@ def gs_expert_type():
     global DIR
     filename = DIR + 'table_gs_expert_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1570,6 +3476,27 @@ def gs_immig_stat():
     global DIR
     filename = DIR + 'table_gs_immig_stat.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1592,6 +3519,27 @@ def gs_job_position():
     global DIR
     filename = DIR + 'table_gs_job_position.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1615,6 +3563,31 @@ def gs_judge():
     global DIR
     filename = DIR + 'table_gs_judge.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'INIT_STAT': 'GS_INIT_STAT(CODE)',
+                'TYPE, DISTRICT': 'GS_JUDGE_TYPE(CODE, DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'ID': n,
+                'INITIALS': v(8),
+                'INIT_STAT': v(4),
+                'LAST_NAME': v(30),
+                'FIRST_NAME': v(30),
+                'COURT_ROOM': v(25),
+                'TYPE': v(4),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1641,6 +3614,27 @@ def gs_judge_type():
     global DIR
     filename = DIR + 'table_gs_judge_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1664,6 +3658,27 @@ def gs_lit_track():
     global DIR
     filename = DIR + 'table_gs_lit_track.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1688,6 +3703,27 @@ def gs_location():
     global DIR
     filename = DIR + 'table_gs_location.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1711,6 +3747,38 @@ def gs_oppose_attorn():
     global DIR
     filename = DIR + 'table_gs_oppose_attorn.txt'
     data = []
+    sql = {
+            'primary': ['ID', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)',
+                'INIT_STAT': 'GS_INIT_STAT(CODE)',
+                'STATE': 'GS_STATE(CODE)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'ID': n,
+                'INITIALS': v(10),
+                'INIT_STAT': v(8),
+                'SALUTATION': v(10),
+                'LAST_NAME': v(30),
+                'FIRST_NAME': v(30),
+                'TITLE': v(30),
+                'FIRM': v(50),
+                'ADDRESS1': v(30),
+                'ADDRESS2': v(30),
+                'ADDRESS3': v(30),
+                'CITY': v(20),
+                'STATE': v(5),
+                'ZIPCODE': v(10),
+                'PHONE': v(15),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1746,6 +3814,27 @@ def gs_position():
     global DIR
     filename = DIR + 'table_gs_position.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1769,6 +3858,27 @@ def gs_prop_type():
     global DIR
     filename = DIR + 'table_gs_prop_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1792,6 +3902,28 @@ def gs_prop_value_type():
     global DIR
     filename = DIR + 'table_gs_prop_value_type.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(50),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
+
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1815,6 +3947,28 @@ def gs_relate_case_reason():
     global DIR
     filename = DIR + 'table_gs_relate_case_reason.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(50),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
+
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1838,6 +3992,28 @@ def gs_relate_part_reason():
     global DIR
     filename = DIR + 'table_gs_relate_part_reason.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
+
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1861,6 +4037,28 @@ def gs_reservation():
     global DIR
     filename = DIR + 'table_gs_reservation.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(30),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
+
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1884,6 +4082,28 @@ def gs_security():
     global DIR
     filename = DIR + 'table_gs_security.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(40),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
+
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1907,6 +4127,28 @@ def gs_staff_section():
     global DIR
     filename = DIR + 'table_gs_staff_section.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(8),
+                'DESCRIPTION': v(50),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
+
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1930,6 +4172,27 @@ def gs_staff_title():
     global DIR
     filename = DIR + 'table_gs_staff_title.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(50),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1953,6 +4216,27 @@ def gs_unit():
     global DIR
     filename = DIR + 'table_gs_unit.txt'
     data = []
+    sql = {
+            'primary': ['CODE', 'DISTRICT'],
+            'foreign':{
+                'DISTRICT': 'GS_DISTRICT(DISTRICT)'
+            },
+            'types': {
+                'DISTRICT': v(8),
+                'CODE': v(4),
+                'DESCRIPTION': v(40),
+                'CODE_STAT': v(8),
+                'GLB_CODE': v(7),
+                'CREATE_DATE':'DATE',
+                'CREATE_USER':'VARCHAR(30)',
+                'UPDATE_DATE':'DATE',
+                'UPDATE_USER':'VARCHAR(30)'
+            },
+            'not_null': [
+                'DISTRICT',
+                'CODE'
+            ]
+    }
     count = 0
     with open(filename) as file:
         for line in file:
@@ -1980,13 +4264,65 @@ def convert(name):
     s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).upper()
 
-
 # Last thing is the stuff in lions global_LIONS.txt
 def parse_global_LIONS():
     global DIR
     filename = DIR + 'global_LIONS.txt'
     datasets = {}
     data = []
+    sql_tables = {
+            'GS_ADR_MODE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(40),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_AGENCY_MASTER': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_AGENCY': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'STATUS': v(6),
+                    'ABBREV': v(10),
+                    'MASTER_CODE': v(10),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            'GS_APPEAL_TYPE': {
+
+            },
+
+    }
     count = 0
     with open(filename) as file:
         current_table = ""
