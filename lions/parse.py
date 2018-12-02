@@ -4320,7 +4320,950 @@ def parse_global_LIONS():
                 ]
             },
             'GS_APPEAL_TYPE': {
-
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_AUDIT_FUNCTION': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(11),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            }, # NOT DONE
+            'GS_BOND_TYPE':{
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CASE_CLASS': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CASE_STATUS': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(15),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CAUSE_ACT_MASTER': {
+                'primary': ['MASTER_CODE'],
+                'foreign':{},
+                'types': {
+                    'MASTER_CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'STATUS': v(6),
+                    'BEGIN_DATE': d,
+                    'END_DATE': d,
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CAUSE_ACT': {
+                'primary': ['CODE'],
+                'foreign':{
+                    'MASTER_CODE': 'GS_CAUSE_ACT_MASTER(MASTER_CODE)'
+                },
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(76),
+                    'STATUS': v(6),
+                    'MASTER_CODE': v(10),
+                    'BEGIN_DATE': d,
+                    'END_DATE': d,
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CHARGE_CAT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CHARGE_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CIVIL_POTEN': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_COLLECT_IND': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_COMMENT_CAT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_CONTROL_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(40),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_COUNTRY_CIT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_COURT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(40),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_DEFEND_STAT_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(50),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_DISP_REAS_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'TYPE': v(5),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_DISP_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'TYPE': v(5),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_DOJ_DIVISION':{
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(50),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            } ,
+            'GS_DOM_TERR_IND': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_EMPLOYER_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(60),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_EXPERT_SIDE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(15),
+                    'CODE_STAT': v(8),
+                    'GLB_CODE': v(7),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_GENDER': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(11),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_GUIDE_DEPART': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(60),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_HCARE_BUSN_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(60),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_INCAR_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_INITIATOR': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_INIT_STAT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(11),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_INST_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(35),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_LIT_RESP': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(60),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_MEASURE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_OCCUPATION': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(60),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_PART_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_PENALTY_PROVISION': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_PRIORITY': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(25),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'MASTER_CODE'
+                ]
+            },
+            'GS_PROG_CAT_MASTER': {
+                'primary': ['MASTER_CODE'],
+                'foreign':{},
+                'types': {
+                    'MASTER_CODE': v(4),
+                    'DESCRIPTION': v(50),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_PROG_CAT': {
+                'primary': ['CODE'],
+                'foreign':{
+                    'MASTER_CODE': 'GS_PROG_CAT_MASTER(MASTER_CODE)'
+                },
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'STATUS': v(6),
+                    'MASTER_CODE': v(10),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_RACE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_RELIEF_LIABILITY': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_RELIEF_REQUESTED_BY': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_RELIEF_STAGE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_RELIEF_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_REST_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_REST_RECIPIENT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_ROLE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(40),
+                    'TYPE': v(5),
+                    'PART_TYPE': v(8),
+                    'STATUS': v(6),
+                    'DISPOSE': v(7),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_ROLLUP': {
+                'primary': ['DISP', 'DISP_REAS'],
+                'foreign':{
+                    'DISP': 'GS_DISP_TYPE(CODE)',
+                    'DISP_REAS': 'GS_DISP_REAS_TYPE(CODE)'
+                },
+                'types': {
+                    'DISP': v(4),
+                    'DISP_REAS': v(8),
+                    'CRIM_ORDER': v(10),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'DISP',
+                    'DISP_REAS'
+                ]
+            },
+            'GS_SPECIAL_CONDITION': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_SPEC_PROJ': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(30),
+                    'TYPE': v(5),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_SPECIAL_SERVICES': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(75),
+                    'STATUS': v(6),
+                    'GLB_CODE': v(7),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_STATE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_STORAGE_ITEM_NO': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_TERM_REASON': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(20),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_TRIBE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(70),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_TYPE_OF_ACTION_MAP': {
+                'primary': ['CODE1', 'CODE2'],
+                'foreign':{},
+                'types': {
+                    'CODE1': v(4),
+                    'CODE2': v(4),
+                    'DESCRIPTION': v(30),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_US_ROLE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(35),
+                    'TYPE': v(5),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_VICTIM_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(11),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_VICTIM_UNIT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(11),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_VICTIM_WIT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(11),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_DISTRICT': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(50),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
+            },
+            'GS_ORDER_TYPE': {
+                'primary': ['CODE'],
+                'foreign':{},
+                'types': {
+                    'CODE': v(4),
+                    'DESCRIPTION': v(140),
+                    'STATUS': v(6),
+                    'CREATE_DATE':'DATE',
+                    'CREATE_USER':'VARCHAR(30)',
+                    'UPDATE_DATE':'DATE',
+                    'UPDATE_USER':'VARCHAR(30)'
+                },
+                'not_null': [
+                    'CODE'
+                ]
             }
 
     }
@@ -4334,7 +5277,7 @@ def parse_global_LIONS():
                 continue
             if "GS_" in line:
                 if len(data) > 0:
-                    datasets[current_table] = data
+                    datasets[current_table] = (sql_tables[current_table], data)
                     data = []
                     indices = []
                 current_table = line[:-1]
