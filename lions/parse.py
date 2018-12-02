@@ -229,21 +229,21 @@ def gs_archive_part():
     with open(filename) as file:
         for line in file:
             row = {}
-            row['DISTRICT']
-            row['CASEID']
-            row['ID']
-            row['LAST_NAME']
-            row['FIRST_NAME']
-            row['LAST_SOUNDS']
-            row['FIRST_SOUNDS']
-            row['ROLE']
-            row['DISPOSITION']
-            row['DISP_REASON']
-            row['DISP_DATE']
-            row['CREATE_DATE']
-            row['CREATE_USER']
-            row['UPDATE_DATE']
-            row['UPDATE_USER']
+            row['DISTRICT'] = line[0:10]
+            row['CASEID'] = line[10:20]
+            row['ID'] = line[20:30]
+            row['LAST_NAME'] = line[30:90]
+            row['FIRST_NAME'] = line[90:120]
+            row['LAST_SOUNDS'] = line[120:124]
+            row['FIRST_SOUNDS'] = line[124:128]
+            row['ROLE'] = line[128:130]
+            row['DISPOSITION'] = line[130:132]
+            row['DISP_REASON'] = line[132:136]
+            row['DISP_DATE'] = line[136:147]
+            row['CREATE_DATE'] = line[147:158]
+            row['CREATE_USER'] = line[158:188]
+            row['UPDATE_DATE'] = line[188:199]
+            row['UPDATE_USER'] = line[199:229]
             data.append(row)
     return (sql, data)
 
@@ -647,7 +647,7 @@ def gs_evidence():
             row['GJ_EXHIBIT_NUM'] = line[84:109]
             row['CREATE_DATE'] = line[109:120]
             row['CREATE_USER'] = line[120:150]
-            row['UPDATED_DATE'] = line[150:161]
+            row['UPDATE_DATE'] = line[150:161]
             row['UPDATE_USER'] = line[161:191]
             data.append(row)
     return (sql, data)
@@ -693,7 +693,7 @@ def gs_expert_case():
             row['EXPERTID'] = line[31:41]
             row['CREATE_DATE'] = line[41:52]
             row['CREATE_USER'] = line[52:82]
-            row['UPDATED_DATE'] = line[82:93]
+            row['UPDATE_DATE'] = line[82:93]
             row['UPDATE_USER'] = line[93:123]
             data.append(row)
     return (sql, data)
@@ -749,7 +749,7 @@ def gs_inst_charge():
             row['PENT_PROV'] = line[66:91]
             row['CREATE_DATE'] = line[91:102]
             row['CREATE_USER'] = line[102:132]
-            row['UPDATED_DATE'] = line[132:143]
+            row['UPDATE_DATE'] = line[132:143]
             row['UPDATE_USER'] = line[143:173]
             row['ID'] = line[173:183]
             data.append(row)
@@ -817,7 +817,7 @@ def gs_part_victim():
             row['NOTIFICAT_RECVD'] = line[98:99]
             row['CREATE_DATE'] = line[99:110]
             row['CREATE_USER'] = line[110:140]
-            row['UPDATED_DATE'] = line[140:151]
+            row['UPDATE_DATE'] = line[140:151]
             row['UPDATE_USER'] = line[151:181]
             data.append(row)
     return (sql, data)
@@ -865,7 +865,7 @@ def gs_relate_case():
             row['REASON'] = line[50:52]
             row['CREATE_DATE'] = line[52:63]
             row['CREATE_USER'] = line[63:93]
-            row['UPDATED_DATE'] = line[93:104]
+            row['UPDATE_DATE'] = line[93:104]
             row['UPDATE_USER'] = line[104:134]
             row['ID'] = line[134:144]
             data.append(row)
@@ -913,7 +913,7 @@ def gs_relate_part():
             row['REASON'] = line[40:42]
             row['CREATE_DATE'] = line[42:53]
             row['CREATE_USER'] = line[53:83]
-            row['UPDATED_DATE'] = line[83:94]
+            row['UPDATE_DATE'] = line[83:94]
             row['UPDATE_USER'] = line[94:125]
             data.append(row)
     return (sql, data)
@@ -971,10 +971,10 @@ def gs_cont_services():
             row['SERV_SPECIAL'] = line[68:72]
             row['CREATE_DATE'] = line[72:83]
             row['CREATE_USER'] = line[83:113]
-            row['UPDATED_DATE'] = line[113:124]
+            row['UPDATE_DATE'] = line[113:124]
             row['UPDATE_USER'] = line[124:154]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_contact_log():
     global DIR
@@ -1034,10 +1034,10 @@ def gs_contact_log():
             row['DOC_CODE'] = line[67:70]
             row['CREATE_DATE'] = line[70:81]
             row['CREATE_USER'] = line[81:111]
-            row['UPDATED_DATE'] = line[111:122]
+            row['UPDATE_DATE'] = line[111:122]
             row['UPDATE_USER'] = line[122:152]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_control_sub():
     global DIR
@@ -1083,10 +1083,10 @@ def gs_control_sub():
             row['OTHER_DESCRIP'] = line[46:76]
             row['CREATE_DATE'] = line[76:87]
             row['CREATE_USER'] = line[87:117]
-            row['UPDATED_DATE'] = line[117:128]
+            row['UPDATE_DATE'] = line[117:128]
             row['UPDATE_USER'] = line[128:158]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_count():
     global DIR
@@ -1137,11 +1137,11 @@ def gs_count():
             row['ID'] = line[66:76]
             row['CREATE_DATE'] = line[76:87]
             row['CREATE_USER'] = line[87:117]
-            row['UPDATED_DATE'] = line[117:128]
+            row['UPDATE_DATE'] = line[117:128]
             row['UPDATE_USER'] = line[128:158]
             row['PENT_PROV'] = line[158:183]
             data.append(row)
-    return data
+    return (sql, data)
 
 # Parse DISK03
 def gs_court_hist():
@@ -1221,10 +1221,10 @@ def gs_court_hist():
             row['SYS_FILING_DATE'] = line[146:157]
             row['CREATE_DATE'] = line[157:168]
             row['CREATE_USER'] = line[168:198]
-            row['UPDATED_DATE'] = line[198:209]
+            row['UPDATE_DATE'] = line[198:209]
             row['UPDATE_USER'] = line[209:239]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_court_judge():
     global DIR
@@ -1272,10 +1272,10 @@ def gs_court_judge():
             row['END_DATE'] = line[65:76]
             row['CREATE_DATE'] = line[76:87]
             row['CREATE_USER'] = line[87:117]
-            row['UPDATED_DATE'] = line[117:128]
+            row['UPDATE_DATE'] = line[117:128]
             row['UPDATE_USER'] = line[128:158]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_dna():
     global DIR
@@ -1331,10 +1331,10 @@ def gs_dna():
             row['COMMENTS'] = line[32:33]
             row['CREATE_DATE'] = line[33:44]
             row['CREATE_USER'] = line[44:74]
-            row['UPDATED_DATE'] = line[74:85]
+            row['UPDATE_DATE'] = line[74:85]
             row['UPDATE_USER'] = line[85:115]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_prop_value():
     global DIR
@@ -1382,10 +1382,10 @@ def gs_prop_value():
             row['PROP_DATE'] = line[56:67]
             row['CREATE_DATE'] = line[67:78]
             row['CREATE_USER'] = line[78:108]
-            row['UPDATED_DATE'] = line[108:119]
+            row['UPDATE_DATE'] = line[108:119]
             row['UPDATE_USER'] = line[119:149]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_region():
     global DIR
@@ -1419,10 +1419,10 @@ def gs_region():
             row['DESCRIPTION'] = line[6:36]
             row['CREATE_DATE'] = line[36:47]
             row['CREATE_USER'] = line[47:77]
-            row['UPDATED_DATE'] = line[77:88]
+            row['UPDATE_DATE'] = line[77:88]
             row['UPDATE_USER'] = line[88:118]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_relate_appeal():
     global DIR
@@ -1470,10 +1470,10 @@ def gs_relate_appeal():
             row['REASON'] = line[50:52]
             row['CREATE_DATE'] = line[52:63]
             row['CREATE_USER'] = line[63:93]
-            row['UPDATED_DATE'] = line[93:104]
+            row['UPDATE_DATE'] = line[93:104]
             row['UPDATE_USER'] = line[104:134]
             data.append(row)
-    return data
+    return (sql, data)
 
 # DISK04
 def gs_sentence():
@@ -1570,11 +1570,11 @@ def gs_sentence():
             row['RESTITUTION_AMT'] = line[258:274]
             row['CREATE_DATE'] = line[274:285]
             row['CREATE_USER'] = line[285:315]
-            row['UPDATED_DATE'] = line[315:326]
+            row['UPDATE_DATE'] = line[315:326]
             row['UPDATE_USER'] = line[326:356]
             row['SUPV_REL_INCAR_TYPE'] = line[356:357]
             data.append(row)
-    return data
+    return (sql, data)
 
 # they split it up by district
 def gs_event():
@@ -1643,10 +1643,10 @@ def gs_event():
                 row['DOCUMENT_DATE'] = line[312:323]
                 row['CREATE_DATE'] = line[323:334]
                 row['CREATE_USER'] = line[334:364]
-                row['UPDATED_DATE'] = line[364:375]
+                row['UPDATE_DATE'] = line[364:375]
                 row['UPDATE_USER'] = line[375:405]
                 data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_oppose_coun():
@@ -1697,10 +1697,10 @@ def gs_oppose_coun():
             row['END_DATE'] = line[63:74]
             row['CREATE_DATE'] = line[74:85]
             row['CREATE_USER'] = line[85:115]
-            row['UPDATED_DATE'] = line[115:126]
+            row['UPDATE_DATE'] = line[115:126]
             row['UPDATE_USER'] = line[126:156]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_restitution():
     global DIR
@@ -1755,10 +1755,10 @@ def gs_restitution():
             row['LIABILITY'] = line[66:67]
             row['CREATE_DATE'] = line[67:78]
             row['CREATE_USER'] = line[78:108]
-            row['UPDATED_DATE'] = line[108:119]
+            row['UPDATE_DATE'] = line[108:119]
             row['UPDATE_USER'] = line[119:149]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_participant():
     global DIR
@@ -1954,10 +1954,10 @@ def gs_participant():
                 row['HCARE_BUSN_DESC'] = line[1037:1077]
                 row['CREATE_DATE'] = line[1077:1088]
                 row['CREATE_USER'] = line[1088:1118]
-                row['UPDATED_DATE'] = line[1118:1129]
+                row['UPDATE_DATE'] = line[1118:1129]
                 row['UPDATE_USER'] = line[1129:1159]
                 data.append(row)
-    return data
+    return (sql, data)
 
 def gs_part_event():
     global DIR
@@ -2004,10 +2004,10 @@ def gs_part_event():
                 row['EVENTID'] = line[40:50]
                 row['CREATE_DATE'] = line[50:61]
                 row['CREATE_USER'] = line[61:91]
-                row['UPDATED_DATE'] = line[91:102]
+                row['UPDATE_DATE'] = line[91:102]
                 row['UPDATE_USER'] = line[102:132]
                 data.append(row)
-    return data
+    return (sql, data)
 
 def gs_court_order_disp():
     global DIR
@@ -2067,10 +2067,10 @@ def gs_court_order_disp():
             row['PARTID2'] = line[188:198]
             row['CREATE_DATE'] = line[198:209]
             row['CREATE_USER'] = line[209:239]
-            row['UPDATED_DATE'] = line[239:250]
+            row['UPDATE_DATE'] = line[239:250]
             row['UPDATE_USER'] = line[250:280]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_defend_stat():
     global DIR
@@ -2134,10 +2134,10 @@ def gs_defend_stat():
             row['END_DATE'] = line[102:113]
             row['CREATE_DATE'] = line[113:124]
             row['CREATE_USER'] = line[124:154]
-            row['UPDATED_DATE'] = line[154:165]
+            row['UPDATE_DATE'] = line[154:165]
             row['UPDATE_USER'] = line[165:195]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_instrument():
     global DIR
@@ -2185,10 +2185,10 @@ def gs_instrument():
             row['SYS_FILING_DATE'] = line[53:64]
             row['CREATE_DATE'] = line[64:75]
             row['CREATE_USER'] = line[75:105]
-            row['UPDATED_DATE'] = line[105:116]
+            row['UPDATE_DATE'] = line[105:116]
             row['UPDATE_USER'] = line[116:146]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_agent():
     global DIR
@@ -2246,10 +2246,10 @@ def gs_agent():
             row['EMAIL'] = line[189:289]
             row['CREATE_DATE'] = line[289:300]
             row['CREATE_USER'] = line[300:330]
-            row['UPDATED_DATE'] = line[330:341]
+            row['UPDATE_DATE'] = line[330:341]
             row['UPDATE_USER'] = line[341:371]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_part_court():
@@ -2306,10 +2306,10 @@ def gs_part_court():
             row['SYS_INIT_DATE'] = line[70:81]
             row['CREATE_DATE'] = line[81:92]
             row['CREATE_USER'] = line[92:122]
-            row['UPDATED_DATE'] = line[122:133]
+            row['UPDATE_DATE'] = line[122:133]
             row['UPDATE_USER'] = line[133:163]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_assignment():
@@ -2361,10 +2361,10 @@ def gs_assignment():
             row['END_DATE'] = line[62:73]
             row['CREATE_DATE'] = line[73:84]
             row['CREATE_USER'] = line[84:114]
-            row['UPDATED_DATE'] = line[114:125]
+            row['UPDATE_DATE'] = line[114:125]
             row['UPDATE_USER'] = line[125:155]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_part_count():
     global DIR
@@ -2428,10 +2428,10 @@ def gs_part_count():
             row['SEALED'] = line[103:104]
             row['CREATE_DATE'] = line[104:115]
             row['CREATE_USER'] = line[115:145]
-            row['UPDATED_DATE'] = line[145:156]
+            row['UPDATE_DATE'] = line[145:156]
             row['UPDATE_USER'] = line[156:186]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_part_relief():
@@ -2472,10 +2472,10 @@ def gs_part_relief():
             row['RELIEFID'] = line[30:40]
             row['CREATE_DATE'] = line[40:51]
             row['CREATE_USER'] = line[51:81]
-            row['UPDATED_DATE'] = line[81:92]
+            row['UPDATE_DATE'] = line[81:92]
             row['UPDATE_USER'] = line[92:122]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_relief():
     global DIR
@@ -2533,10 +2533,10 @@ def gs_relief():
             row['AGENCY'] = line[80:84]
             row['CREATE_DATE'] = line[84:95]
             row['CREATE_USER'] = line[95:125]
-            row['UPDATED_DATE'] = line[125:136]
+            row['UPDATE_DATE'] = line[125:136]
             row['UPDATE_USER'] = line[136:166]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_triggerlock():
     global DIR
@@ -2598,10 +2598,10 @@ def gs_triggerlock():
             row['ARMED_CAREER_CRIMINAL'] = line[226:227]
             row['CREATE_DATE'] = line[227:238]
             row['CREATE_USER'] = line[238:268]
-            row['UPDATED_DATE'] = line[268:279]
+            row['UPDATE_DATE'] = line[268:279]
             row['UPDATE_USER'] = line[279:309]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_comment():
     global DIR
@@ -2646,10 +2646,10 @@ def gs_comment():
             row['TEXT'] = line[41:42]
             row['CREATE_DATE'] = line[42:53]
             row['CREATE_USER'] = line[53:83]
-            row['UPDATED_DATE'] = line[83:94]
+            row['UPDATE_DATE'] = line[83:94]
             row['UPDATE_USER'] = line[94:124]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_request():
@@ -2699,10 +2699,10 @@ def gs_request():
             row['BOXID'] = line[93:102]
             row['CREATE_DATE'] = line[102:113]
             row['CREATE_USER'] = line[113:143]
-            row['UPDATED_DATE'] = line[143:154]
+            row['UPDATE_DATE'] = line[143:154]
             row['UPDATE_USER'] = line[154:184]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_staff():
     global DIR
@@ -2792,7 +2792,7 @@ def gs_staff():
             row['DR_USERNAME'] = line[419:449]
             row['GUID'] = line[449:479]
             data.append(row)
-    return data
+    return (sql, data)
 
 # Now, in disk24, there's a bunch of constant tables that need to be translated
 # These tables all have codes and their meanings, which vary depending on district
@@ -2835,10 +2835,10 @@ def gs_action():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_agency_off():
     global DIR
@@ -2899,10 +2899,10 @@ def gs_agency_off():
             row['CHIEF_TITLE'] = line[291:321]
             row['CREATE_DATE'] = line[322:332]
             row['CREATE_USER'] = line[333:363]
-            row['UPDATED_DATE'] = line[364:374]
+            row['UPDATE_DATE'] = line[364:374]
             row['UPDATE_USER'] = line[375:405]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_business_type():
     global DIR
@@ -2943,10 +2943,10 @@ def gs_business_type():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[114:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_case_type():
     global DIR
@@ -2988,10 +2988,10 @@ def gs_case_type():
             row['GLB_CODE'] = line[60:67]
             row['CREATE_DATE'] = line[68:78]
             row['CREATE_USER'] = line[79:109]
-            row['UPDATED_DATE'] = line[110:120]
+            row['UPDATE_DATE'] = line[110:120]
             row['UPDATE_USER'] = line[121:151]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_case_weight():
     global DIR
@@ -3032,10 +3032,10 @@ def gs_case_weight():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_counsel_type():
@@ -3077,10 +3077,10 @@ def gs_counsel_type():
             row['GLB_CODE'] = line[64:71]
             row['CREATE_DATE'] = line[72:82]
             row['CREATE_USER'] = line[83:113]
-            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_DATE'] = line[114:124]
             row['UPDATE_USER'] = line[125:155]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_court_loc():
@@ -3123,10 +3123,10 @@ def gs_court_loc():
             row['DESCRIPTION'] = line[15:75]
             row['CREATE_DATE'] = line[76:86]
             row['CREATE_USER'] = line[878:117]
-            row['UPDATED_DATE'] = line[118:128]
+            row['UPDATE_DATE'] = line[118:128]
             row['UPDATE_USER'] = line[129:159]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_deten_reason():
@@ -3168,10 +3168,10 @@ def gs_deten_reason():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 # this one's a little messed up
 def gs_event_type():
@@ -3218,10 +3218,10 @@ def gs_event_type():
             row['GLB_CODE'] = line[100:107]
             row['CREATE_DATE'] = line[108:118]
             row['CREATE_USER'] = line[119:149]
-            row['UPDATED_DATE'] = line[150:160]
+            row['UPDATE_DATE'] = line[150:160]
             #row['UPDATE_USER'] = line[]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_evid_disp():
     global DIR
@@ -3262,10 +3262,10 @@ def gs_evid_disp():
             row['GLB_CODE'] = line[59:56]
             row['CREATE_DATE'] = line[57:67]
             row['CREATE_USER'] = line[68:98]
-            row['UPDATED_DATE'] = line[99:109]
+            row['UPDATE_DATE'] = line[99:109]
             row['UPDATE_USER'] = line[110:140]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_evid_location():
     global DIR
@@ -3306,10 +3306,10 @@ def gs_evid_location():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_evid_type():
     global DIR
@@ -3350,10 +3350,10 @@ def gs_evid_type():
             row['GLB_CODE'] = line[64:71]
             row['CREATE_DATE'] = line[72:82]
             row['CREATE_USER'] = line[83:113]
-            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_DATE'] = line[114:124]
             row['UPDATE_USER'] = line[125:115]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_expert():
     global DIR
@@ -3423,10 +3423,10 @@ def gs_expert():
             row['FAX'] = line[307:322]
             row['CREATE_DATE'] = line[323:333]
             row['CREATE_USER'] = line[334:364]
-            row['UPDATED_DATE'] = line[364:375]
+            row['UPDATE_DATE'] = line[364:375]
             row['UPDATE_USER'] = line[376:406]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_expert_type():
     global DIR
@@ -3467,10 +3467,10 @@ def gs_expert_type():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_immig_stat():
     global DIR
@@ -3511,9 +3511,9 @@ def gs_immig_stat():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
-    return data
+    return (sql, data)
 
 def gs_job_position():
     global DIR
@@ -3554,10 +3554,10 @@ def gs_job_position():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_judge():
     global DIR
@@ -3605,10 +3605,10 @@ def gs_judge():
             row['TYPE'] = line[123:127]
             row['CREATE_DATE'] = line[128:138]
             row['CREATE_USER'] = line[139:169]
-            row['UPDATED_DATE'] = line[170:180]
+            row['UPDATE_DATE'] = line[170:180]
             row['UPDATE_USER'] = line[181:211]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_judge_type():
     global DIR
@@ -3649,10 +3649,10 @@ def gs_judge_type():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_lit_track():
     global DIR
@@ -3693,10 +3693,10 @@ def gs_lit_track():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 
 def gs_location():
@@ -3738,10 +3738,10 @@ def gs_location():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_oppose_attorn():
     global DIR
@@ -3805,10 +3805,10 @@ def gs_oppose_attorn():
             row['FAX'] = line[343:358]
             row['CREATE_DATE'] = line[359:369]
             row['CREATE_USER'] = line[370:400]
-            row['UPDATED_DATE'] = line[401:411]
+            row['UPDATE_DATE'] = line[401:411]
             row['UPDATE_USER'] = line[412:442]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_position():
     global DIR
@@ -3849,10 +3849,10 @@ def gs_position():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_prop_type():
     global DIR
@@ -3893,10 +3893,10 @@ def gs_prop_type():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_prop_value_type():
     global DIR
@@ -3938,10 +3938,10 @@ def gs_prop_value_type():
             row['GLB_CODE'] = line[74:81]
             row['CREATE_DATE'] = line[82:92]
             row['CREATE_USER'] = line[93:123]
-            row['UPDATED_DATE'] = line[124:134]
+            row['UPDATE_DATE'] = line[124:134]
             row['UPDATE_USER'] = line[135:165]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_relate_case_reason():
     global DIR
@@ -3983,10 +3983,10 @@ def gs_relate_case_reason():
             row['GLB_CODE'] = line[74:81]
             row['CREATE_DATE'] = line[82:92]
             row['CREATE_USER'] = line[93:123]
-            row['UPDATED_DATE'] = line[124:134]
+            row['UPDATE_DATE'] = line[124:134]
             row['UPDATE_USER'] = line[135:165]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_relate_part_reason():
     global DIR
@@ -4028,10 +4028,10 @@ def gs_relate_part_reason():
             row['GLB_CODE'] = line[54:61]
             row['CREATE_DATE'] = line[62:72]
             row['CREATE_USER'] = line[73:103]
-            row['UPDATED_DATE'] = line[104:114]
+            row['UPDATE_DATE'] = line[104:114]
             row['UPDATE_USER'] = line[115:145]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_reservation():
     global DIR
@@ -4073,10 +4073,10 @@ def gs_reservation():
             row['GLB_CODE'] = line[64:71]
             row['CREATE_DATE'] = line[72:82]
             row['CREATE_USER'] = line[83:113]
-            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_DATE'] = line[114:124]
             row['UPDATE_USER'] = line[125:155]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_security():
     global DIR
@@ -4118,10 +4118,10 @@ def gs_security():
             row['GLB_CODE'] = line[64:71]
             row['CREATE_DATE'] = line[72:82]
             row['CREATE_USER'] = line[83:113]
-            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_DATE'] = line[114:124]
             row['UPDATE_USER'] = line[125:155]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_staff_section():
     global DIR
@@ -4163,10 +4163,10 @@ def gs_staff_section():
             row['GLB_CODE'] = line[78:85]
             row['CREATE_DATE'] = line[86:96]
             row['CREATE_USER'] = line[97:127]
-            row['UPDATED_DATE'] = line[128:138]
+            row['UPDATE_DATE'] = line[128:138]
             row['UPDATE_USER'] = line[139:169]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_staff_title():
     global DIR
@@ -4207,10 +4207,10 @@ def gs_staff_title():
             row['GLB_CODE'] = line[74:81]
             row['CREATE_DATE'] = line[82:92]
             row['CREATE_USER'] = line[93:123]
-            row['UPDATED_DATE'] = line[124:134]
+            row['UPDATE_DATE'] = line[124:134]
             row['UPDATE_USER'] = line[135:165]
             data.append(row)
-    return data
+    return (sql, data)
 
 def gs_unit():
     global DIR
@@ -4251,10 +4251,10 @@ def gs_unit():
             row['GLB_CODE'] = line[64:71]
             row['CREATE_DATE'] = line[72:82]
             row['CREATE_USER'] = line[83:113]
-            row['UPDATED_DATE'] = line[114:124]
+            row['UPDATE_DATE'] = line[114:124]
             row['UPDATE_USER'] = line[125:155]
             data.append(row)
-    return data
+    return (sql, data)
 
 def find_indices(line):
     return [(m.start(), m.end()) for m in re.finditer(r'\S+', line)]
