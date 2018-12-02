@@ -5300,11 +5300,28 @@ def parse_global_LIONS():
     return datasets
 
 def create_complete_lions_dictionary():
+    """
     lions = {}
     lions['GS_ALSO_KNOWN'] = gs_also_known()
     lions['GS_ARCHIVE_CASE'] = gs_archive_case()
     return lions
+    """
+    return gs_court_hist()
+
+def countDisp():
+    lions = create_complete_lions_dictionary()
+    data = lions[1]
+    count = 0
+
+    for line in data:
+        disp = line['DISPOSITION']
+
+        if len(disp.rstrip()) == 0:
+            count += 1
+            
+    return (count, len(data))
 
 if __name__ == '__main__':
-    lions = create_complete_lions_dictionary()
+    #lions = create_complete_lions_dictionary()
+    print(countDisp)
 
