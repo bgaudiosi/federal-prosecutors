@@ -1212,7 +1212,7 @@ def gs_court_hist():
             row['NOAP_DATE'] = line[97:108]
             row['APPEAL_TYPE'] = line[108:109]
             row['SENT_APPEAL'] = line[109:110]
-            row['DISPOSITION'] = line[100:112]
+            row['DISPOSITION'] = line[110:112]
             row['DISP_DATE'] = line[112:123]
             row['DISP_REASON1'] = line[123:127]
             row['DISP_REASON2'] = line[127:131]
