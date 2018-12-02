@@ -5321,3 +5321,7 @@ def countDisp():
             
     return (count, len(data))
 
+if __name__ == '__main__':
+    #lions = create_complete_lions_dictionary()
+    print(countDisp)
+
