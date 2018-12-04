@@ -3594,6 +3594,9 @@ def gs_judge():
             if count < 4:
                 count += 1
                 continue
+            if 'GS_JUDGE' in line or 'Date:' in line:
+                count = 0
+                continue
             row = {}
             row['DISTRICT'] = line[0:8]
             row['ID'] = line[8:20]
