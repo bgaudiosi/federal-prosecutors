@@ -2824,7 +2824,7 @@ def gs_action():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -2879,7 +2879,7 @@ def gs_agency_off():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -2932,7 +2932,7 @@ def gs_business_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -2976,7 +2976,7 @@ def gs_case_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3021,7 +3021,7 @@ def gs_case_weight():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3066,7 +3066,7 @@ def gs_counsel_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3113,7 +3113,7 @@ def gs_court_loc():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3157,7 +3157,7 @@ def gs_deten_reason():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3251,7 +3251,7 @@ def gs_evid_disp():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3295,7 +3295,7 @@ def gs_evid_location():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3339,7 +3339,7 @@ def gs_evid_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3399,7 +3399,7 @@ def gs_expert():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3456,7 +3456,7 @@ def gs_expert_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3500,7 +3500,7 @@ def gs_immig_stat():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3543,7 +3543,7 @@ def gs_job_position():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3591,7 +3591,7 @@ def gs_judge():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             if 'GS_JUDGE' in line or 'Date:' in line:
@@ -3641,7 +3641,7 @@ def gs_judge_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3685,7 +3685,7 @@ def gs_lit_track():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3730,7 +3730,7 @@ def gs_location():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3785,7 +3785,7 @@ def gs_oppose_attorn():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3841,7 +3841,7 @@ def gs_position():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3885,7 +3885,7 @@ def gs_prop_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3930,7 +3930,7 @@ def gs_prop_value_type():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -3975,7 +3975,7 @@ def gs_relate_case_reason():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -4020,7 +4020,7 @@ def gs_relate_part_reason():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -4065,7 +4065,7 @@ def gs_reservation():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -4110,7 +4110,7 @@ def gs_security():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -4155,7 +4155,7 @@ def gs_staff_section():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -4199,7 +4199,7 @@ def gs_staff_title():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
@@ -4243,7 +4243,7 @@ def gs_unit():
     count = 0
     with open(filename) as file:
         for line in file:
-            if count < 4:
+            if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
                 continue
             row = {}
