@@ -303,7 +303,7 @@ def gs_case():
                 'LEAD_CHARGE': v(25),
                 'PHYSICAL_LOC': v(20),
                 'STORE_NUM': v(20),
-                'CIVL_POTEN': 1,
+                'CIVIL_POTEN': v(1),
                 'SYS_INIT_DATE': d,
                 'ACCESS_DATE': d,
                 'STATUS': v(1),
@@ -3758,10 +3758,10 @@ def gs_oppose_attorn():
                 'STATE': 'GS_STATE(CODE)'
             },
             'types': {
-                'DISTRICT': v(8),
+                'DISTRICT': v(10),
                 'ID': n,
                 'INITIALS': v(10),
-                'INIT_STAT': v(8),
+                'INIT_STAT': v(10),
                 'SALUTATION': v(10),
                 'LAST_NAME': v(30),
                 'FIRST_NAME': v(30),
@@ -3787,6 +3787,9 @@ def gs_oppose_attorn():
         for line in file:
             if count < 4 or len(line) == 0 or len(line) == 1 or 'rows' in line:
                 count += 1
+                continue
+            if 'GS_OPPOSE_ATTORN' in line or 'Date:' in line:
+                count = 0
                 continue
             row = {}
             row['DISTRICT'] = line[0:8].rstrip().lstrip()
@@ -4048,7 +4051,7 @@ def gs_reservation():
             'types': {
                 'DISTRICT': v(8),
                 'CODE': v(4),
-                'DESCRIPTION': v(30),
+                'DESCRIPTION': v(40),
                 'CODE_STAT': v(8),
                 'GLB_CODE': v(7),
                 'CREATE_DATE':'DATE',
@@ -4402,7 +4405,7 @@ def parse_global_LIONS():
                 'foreign':{},
                 'types': {
                     'MASTER_CODE': v(4),
-                    'DESCRIPTION': v(30),
+                    'DESCRIPTION': v(35),
                     'STATUS': v(6),
                     'BEGIN_DATE': d,
                     'END_DATE': d,
@@ -4455,7 +4458,7 @@ def parse_global_LIONS():
                 'primary': ['CODE'],
                 'foreign':{},
                 'types': {
-                    'CODE': v(4),
+                    'CODE': v(25),
                     'DESCRIPTION': v(70),
                     'STATUS': v(6),
                     'CREATE_DATE':'DATE',
@@ -4844,7 +4847,7 @@ def parse_global_LIONS():
                 'primary': ['CODE'],
                 'foreign':{},
                 'types': {
-                    'CODE': v(4),
+                    'CODE': v(25),
                     'DESCRIPTION': v(70),
                     'STATUS': v(6),
                     'CREATE_DATE':'DATE',
@@ -4868,7 +4871,7 @@ def parse_global_LIONS():
                     'UPDATE_USER':'VARCHAR(30)'
                 },
                 'not_null': [
-                    'MASTER_CODE'
+                    'CODE'
                 ]
             },
             'GS_PROG_CAT_MASTER': {
@@ -5163,9 +5166,9 @@ def parse_global_LIONS():
                 'primary': ['CODE1', 'CODE2'],
                 'foreign':{},
                 'types': {
-                    'CODE1': v(4),
-                    'CODE2': v(4),
-                    'DESCRIPTION': v(30),
+                    'CODE1': v(6),
+                    'CODE2': v(5),
+                    'STATUS': v(6),
                     'CREATE_DATE':'DATE',
                     'CREATE_USER':'VARCHAR(30)',
                     'UPDATE_DATE':'DATE',
@@ -5238,10 +5241,10 @@ def parse_global_LIONS():
                 ]
             },
             'GS_DISTRICT': {
-                'primary': ['CODE'],
+                'primary': ['DISTRICT'],
                 'foreign':{},
                 'types': {
-                    'CODE': v(4),
+                    'DISTRICT': v(8),
                     'DESCRIPTION': v(50),
                     'CREATE_DATE':'DATE',
                     'CREATE_USER':'VARCHAR(30)',
@@ -5249,7 +5252,7 @@ def parse_global_LIONS():
                     'UPDATE_USER':'VARCHAR(30)'
                 },
                 'not_null': [
-                    'CODE'
+                    'DISTRICT'
                 ]
             },
             'GS_ORDER_TYPE': {
