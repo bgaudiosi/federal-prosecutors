@@ -13,7 +13,7 @@ def v(x):
     return 'VARCHAR(' + str(x) + ')'
 d = 'DATE'
 
-def get_district_list():
+def get_district_list(columns=None):
     districts = ["AK", "ALM", "ALN", "ALS", "ARE", \
                  "ARW", "AZ", "CAC", "CAE", "CAN", \
                  "CAS", "CO", "CT", "DC", "DE", \
@@ -37,7 +37,7 @@ def get_district_list():
     return districts
 
 # Parse DISK01
-def gs_also_known():
+def gs_also_known(columns=None):
     global DIR
     filename = DIR + 'gs_also_known.txt'
     data = []
@@ -84,10 +84,15 @@ def gs_also_known():
             row['CREATE_USER'] = line[149:179].rstrip().lstrip()
             row['UPDATE_DATE'] = line[179:190].rstrip().lstrip()
             row['UPDATE_USER'] = line[190:220].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_archive_case():
+def gs_archive_case(columns=None):
     global DIR
     filename = DIR + 'gs_archive_case.txt'
     data = []
@@ -182,11 +187,16 @@ def gs_archive_case():
             row['CREATE_USER'] = line[377:407].rstrip().lstrip()
             row['UPDATE_DATE'] = line[407:418].rstrip().lstrip()
             row['UDPATE_USER'] = line[418:448].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_archive_part():
+def gs_archive_part(columns=None):
     global DIR
     disk = "DISK01"
     filename = DIR + 'gs_archive_part.txt'
@@ -244,10 +254,15 @@ def gs_archive_part():
             row['CREATE_USER'] = line[158:188].rstrip().lstrip()
             row['UPDATE_DATE'] = line[188:199].rstrip().lstrip()
             row['UPDATE_USER'] = line[199:229].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_case():
+def gs_case(columns=None):
     global DIR
     filename = DIR + 'gs_case.txt'
     data = []
@@ -333,6 +348,7 @@ def gs_case():
             ]
     }
     with open(filename) as file:
+        count = 0
         for line in file:
             row = {}
             row['DISTRICT'] = line[0:3].rstrip().lstrip()
@@ -378,10 +394,20 @@ def gs_case():
             row['CREATE_USER'] = line[295:235].rstrip().lstrip()
             row['UPDATE_DATE'] = line[325:336].rstrip().lstrip()
             row['UPDATE_USER'] = line[336:337].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_case_cause_act():
+def gs_case_cause_act(columns=None):
     global DIR
     filename = DIR + 'gs_case_cause_act.txt'
     data = []
@@ -421,10 +447,15 @@ def gs_case_cause_act():
             row['CREATE_USER'] = line[45:75].rstrip().lstrip()
             row['UPDATE_DATE'] = line[75:86].rstrip().lstrip()
             row['UPDATE_USER'] = line[86:116].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_case_doj_div():
+def gs_case_doj_div(columns=None):
     global DIR
     filename = DIR + 'gs_case_doj_div.txt'
     data = []
@@ -465,10 +496,15 @@ def gs_case_doj_div():
             row['CREATE_USER'] = line[70:100].rstrip().lstrip()
             row['UPDATE_DATE'] = line[100:111].rstrip().lstrip()
             row['UPDATE_USER'] = line[11:141].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_case_dom_terr_ind():
+def gs_case_dom_terr_ind(columns=None):
     global DIR
     filename = DIR + 'gs_case_dom_terr_ind.txt'
     data = []
@@ -507,10 +543,15 @@ def gs_case_dom_terr_ind():
             row['CREATE_USER'] = line[43:73].rstrip().lstrip()
             row['UPDATE_DATE'] = line[73:84].rstrip().lstrip()
             row['UPDATE_USER'] = line[84:114].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_case_prog_cat():
+def gs_case_prog_cat(columns=None):
     global DIR
     filename = DIR + 'gs_case_prog_cat.txt'
     data = []
@@ -549,11 +590,16 @@ def gs_case_prog_cat():
             row['CREATE_USER'] = line[44:74].rstrip().lstrip()
             row['UPDATE_DATE'] = line[74:85].rstrip().lstrip()
             row['UPDATE_USER'] = line[85:115].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 # Parse DISK02
-def gs_case_special_proj():
+def gs_case_special_proj(columns=None):
     global DIR
     filename = DIR + 'gs_case_special_proj.txt'
     data = []
@@ -591,10 +637,15 @@ def gs_case_special_proj():
             row['CREATE_USER'] = line[43:73].rstrip().lstrip()
             row['UPDATE_DATE'] = line[73:84].rstrip().lstrip()
             row['UPDATE_USER'] = line[84:114].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_evidence():
+def gs_evidence(columns=None):
     global DIR
     filename = DIR + 'gs_evidence.txt'
     data = []
@@ -649,10 +700,15 @@ def gs_evidence():
             row['CREATE_USER'] = line[120:150].rstrip().lstrip()
             row['UPDATE_DATE'] = line[150:161].rstrip().lstrip()
             row['UPDATE_USER'] = line[161:191].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_expert_case():
+def gs_expert_case(columns=None):
     global DIR
     filename = DIR + 'gs_expert_case.txt'
     data = []
@@ -695,10 +751,15 @@ def gs_expert_case():
             row['CREATE_USER'] = line[52:82].rstrip().lstrip()
             row['UPDATE_DATE'] = line[82:93].rstrip().lstrip()
             row['UPDATE_USER'] = line[93:123].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_inst_charge():
+def gs_inst_charge(columns=None):
     global DIR
     filename = DIR + 'gs_inst_charge.txt'
     data = []
@@ -752,10 +813,15 @@ def gs_inst_charge():
             row['UPDATE_DATE'] = line[132:143].rstrip().lstrip()
             row['UPDATE_USER'] = line[143:173].rstrip().lstrip()
             row['ID'] = line[173:183].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_part_victim():
+def gs_part_victim(columns=None):
     global DIR
     filename = DIR + 'gs_part_victim.txt'
     data = []
@@ -819,10 +885,15 @@ def gs_part_victim():
             row['CREATE_USER'] = line[110:140].rstrip().lstrip()
             row['UPDATE_DATE'] = line[140:151].rstrip().lstrip()
             row['UPDATE_USER'] = line[151:181].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_relate_case():
+def gs_relate_case(columns=None):
     global DIR
     filename = DIR + 'gs_relate_case.txt'
     data = []
@@ -868,10 +939,15 @@ def gs_relate_case():
             row['UPDATE_DATE'] = line[93:104].rstrip().lstrip()
             row['UPDATE_USER'] = line[104:134].rstrip().lstrip()
             row['ID'] = line[134:144].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_relate_part():
+def gs_relate_part(columns=None):
     global DIR
     filename = DIR + 'gs_relate_part.txt'
     data = []
@@ -915,10 +991,15 @@ def gs_relate_part():
             row['CREATE_USER'] = line[53:83].rstrip().lstrip()
             row['UPDATE_DATE'] = line[83:94].rstrip().lstrip()
             row['UPDATE_USER'] = line[94:125].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_cont_services():
+def gs_cont_services(columns=None):
     global DIR
     filename = DIR + 'gs_cont_services.txt'
     data = []
@@ -973,10 +1054,15 @@ def gs_cont_services():
             row['CREATE_USER'] = line[83:113].rstrip().lstrip()
             row['UPDATE_DATE'] = line[113:124].rstrip().lstrip()
             row['UPDATE_USER'] = line[124:154].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_contact_log():
+def gs_contact_log(columns=None):
     global DIR
     filename = DIR + 'gs_contact_log.txt'
     data = []
@@ -1036,10 +1122,15 @@ def gs_contact_log():
             row['CREATE_USER'] = line[81:111].rstrip().lstrip()
             row['UPDATE_DATE'] = line[111:122].rstrip().lstrip()
             row['UPDATE_USER'] = line[122:152].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_control_sub():
+def gs_control_sub(columns=None):
     global DIR
     filename = DIR + 'gs_control_sub.txt'
     data = []
@@ -1085,10 +1176,15 @@ def gs_control_sub():
             row['CREATE_USER'] = line[87:117].rstrip().lstrip()
             row['UPDATE_DATE'] = line[117:128].rstrip().lstrip()
             row['UPDATE_USER'] = line[128:158].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_count():
+def gs_count(columns=None):
     global DIR
     filename = DIR + 'gs_count.txt'
     data = []
@@ -1140,11 +1236,16 @@ def gs_count():
             row['UPDATE_DATE'] = line[117:128].rstrip().lstrip()
             row['UPDATE_USER'] = line[128:158].rstrip().lstrip()
             row['PENT_PROV'] = line[158:183].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 # Parse DISK03
-def gs_court_hist():
+def gs_court_hist(columns=None):
     global DIR
     filename = DIR + 'gs_court_hist.txt'
     data = []
@@ -1223,10 +1324,15 @@ def gs_court_hist():
             row['CREATE_USER'] = line[168:198].rstrip().lstrip()
             row['UPDATE_DATE'] = line[198:209].rstrip().lstrip()
             row['UPDATE_USER'] = line[209:239].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_court_judge():
+def gs_court_judge(columns=None):
     global DIR
     filename = DIR + 'gs_court_judge.txt'
     data = []
@@ -1274,10 +1380,15 @@ def gs_court_judge():
             row['CREATE_USER'] = line[87:117].rstrip().lstrip()
             row['UPDATE_DATE'] = line[117:128].rstrip().lstrip()
             row['UPDATE_USER'] = line[128:158].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_dna():
+def gs_dna(columns=None):
     global DIR
     filename = DIR + 'gs_dna.txt'
     data = []
@@ -1333,10 +1444,15 @@ def gs_dna():
             row['CREATE_USER'] = line[44:74].rstrip().lstrip()
             row['UPDATE_DATE'] = line[74:85].rstrip().lstrip()
             row['UPDATE_USER'] = line[85:115].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_prop_value():
+def gs_prop_value(columns=None):
     global DIR
     filename = DIR + 'gs_prop_value.txt'
     data = []
@@ -1384,10 +1500,15 @@ def gs_prop_value():
             row['CREATE_USER'] = line[78:108].rstrip().lstrip()
             row['UPDATE_DATE'] = line[108:119].rstrip().lstrip()
             row['UPDATE_USER'] = line[119:149].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_region():
+def gs_region(columns=None):
     global DIR
     filename = DIR + 'gs_region.txt'
     data = []
@@ -1421,10 +1542,15 @@ def gs_region():
             row['CREATE_USER'] = line[47:77].rstrip().lstrip()
             row['UPDATE_DATE'] = line[77:88].rstrip().lstrip()
             row['UPDATE_USER'] = line[88:118].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_relate_appeal():
+def gs_relate_appeal(columns=None):
     global DIR
     filename = DIR + 'gs_relate_appeal.txt'
     data = []
@@ -1472,11 +1598,16 @@ def gs_relate_appeal():
             row['CREATE_USER'] = line[63:93].rstrip().lstrip()
             row['UPDATE_DATE'] = line[93:104].rstrip().lstrip()
             row['UPDATE_USER'] = line[104:134].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 # DISK04
-def gs_sentence():
+def gs_sentence(columns=None):
     global DIR
     filename = DIR + 'gs_sentence.txt'
     data = []
@@ -1573,13 +1704,18 @@ def gs_sentence():
             row['UPDATE_DATE'] = line[315:326].rstrip().lstrip()
             row['UPDATE_USER'] = line[326:356].rstrip().lstrip()
             row['SUPV_REL_INCAR_TYPE'] = line[356:357].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 # they split it up by district
-def gs_event():
+def gs_event(columns=None):
     global DIR
-    districts = get_district_list()
+    districts = get_district_list(columns=None)
     data = []
     sql = {
             'primary': ['ID', 'CASEID', 'CRTHISID', 'DISTRICT'],
@@ -1645,11 +1781,16 @@ def gs_event():
                 row['CREATE_USER'] = line[334:364].rstrip().lstrip()
                 row['UPDATE_DATE'] = line[364:375].rstrip().lstrip()
                 row['UPDATE_USER'] = line[375:405].rstrip().lstrip()
+                if columns != None:
+                    updated_row = {}
+                    for col in columns:
+                        updated_row[col] = row[col]
+                    row = updated_row
                 data.append(row)
     return (sql, data)
 
 
-def gs_oppose_coun():
+def gs_oppose_coun(columns=None):
     global DIR
     filename = DIR + 'gs_oppose_coun.txt'
     data = []
@@ -1699,10 +1840,15 @@ def gs_oppose_coun():
             row['CREATE_USER'] = line[85:115].rstrip().lstrip()
             row['UPDATE_DATE'] = line[115:126].rstrip().lstrip()
             row['UPDATE_USER'] = line[126:156].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_restitution():
+def gs_restitution(columns=None):
     global DIR
     filename = DIR + 'gs_restitution.txt'
     data = []
@@ -1757,13 +1903,18 @@ def gs_restitution():
             row['CREATE_USER'] = line[78:108].rstrip().lstrip()
             row['UPDATE_DATE'] = line[108:119].rstrip().lstrip()
             row['UPDATE_USER'] = line[119:149].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_participant():
+def gs_participant(columns=None):
     global DIR
 
-    districts = get_district_list()
+    districts = get_district_list(columns=None)
     data = []
     sql = {
             'primary': ['ID', 'CASEID', 'DISTRICT'],
@@ -1956,12 +2107,17 @@ def gs_participant():
                 row['CREATE_USER'] = line[1088:1118].rstrip().lstrip()
                 row['UPDATE_DATE'] = line[1118:1129].rstrip().lstrip()
                 row['UPDATE_USER'] = line[1129:1159].rstrip().lstrip()
+                if columns != None:
+                    updated_row = {}
+                    for col in columns:
+                        updated_row[col] = row[col]
+                    row = updated_row
                 data.append(row)
     return (sql, data)
 
-def gs_part_event():
+def gs_part_event(columns=None):
     global DIR
-    districts = get_district_list()
+    districts = get_district_list(columns=None)
     data = []
     sql = {
             'primary': ['CASEID', 'PARTID', 'CRTHISID', 'EVENTID', 'DISTRICT'],
@@ -2006,10 +2162,15 @@ def gs_part_event():
                 row['CREATE_USER'] = line[61:91].rstrip().lstrip()
                 row['UPDATE_DATE'] = line[91:102].rstrip().lstrip()
                 row['UPDATE_USER'] = line[102:132].rstrip().lstrip()
+                if columns != None:
+                    updated_row = {}
+                    for col in columns:
+                        updated_row[col] = row[col]
+                    row = updated_row
                 data.append(row)
     return (sql, data)
 
-def gs_court_order_disp():
+def gs_court_order_disp(columns=None):
     global DIR
     filename = DIR + 'gs_court_order_disp.txt'
     data = []
@@ -2069,10 +2230,15 @@ def gs_court_order_disp():
             row['CREATE_USER'] = line[209:239].rstrip().lstrip()
             row['UPDATE_DATE'] = line[239:250].rstrip().lstrip()
             row['UPDATE_USER'] = line[250:280].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_defend_stat():
+def gs_defend_stat(columns=None):
     global DIR
     filename = DIR + 'gs_defend_stat.txt'
     data = []
@@ -2136,10 +2302,15 @@ def gs_defend_stat():
             row['CREATE_USER'] = line[124:154].rstrip().lstrip()
             row['UPDATE_DATE'] = line[154:165].rstrip().lstrip()
             row['UPDATE_USER'] = line[165:195].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_instrument():
+def gs_instrument(columns=None):
     global DIR
     filename = DIR + 'gs_instrument.txt'
     data = []
@@ -2187,10 +2358,15 @@ def gs_instrument():
             row['CREATE_USER'] = line[75:105].rstrip().lstrip()
             row['UPDATE_DATE'] = line[105:116].rstrip().lstrip()
             row['UPDATE_USER'] = line[116:146].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_agent():
+def gs_agent(columns=None):
     global DIR
     filename = DIR + 'gs_instrument.txt'
     data = []
@@ -2248,11 +2424,16 @@ def gs_agent():
             row['CREATE_USER'] = line[300:330].rstrip().lstrip()
             row['UPDATE_DATE'] = line[330:341].rstrip().lstrip()
             row['UPDATE_USER'] = line[341:371].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_part_court():
+def gs_part_court(columns=None):
     global DIR
     filename = DIR + 'gs_part_court.txt'
     data = []
@@ -2308,11 +2489,16 @@ def gs_part_court():
             row['CREATE_USER'] = line[92:122].rstrip().lstrip()
             row['UPDATE_DATE'] = line[122:133].rstrip().lstrip()
             row['UPDATE_USER'] = line[133:163].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_assignment():
+def gs_assignment(columns=None):
     global DIR
     filename = DIR + 'gs_assignment.txt'
     data = []
@@ -2363,10 +2549,15 @@ def gs_assignment():
             row['CREATE_USER'] = line[84:114].rstrip().lstrip()
             row['UPDATE_DATE'] = line[114:125].rstrip().lstrip()
             row['UPDATE_USER'] = line[125:155].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_part_count():
+def gs_part_count(columns=None):
     global DIR
     filename = DIR + 'gs_part_count.txt'
     data = []
@@ -2430,11 +2621,16 @@ def gs_part_count():
             row['CREATE_USER'] = line[115:145].rstrip().lstrip()
             row['UPDATE_DATE'] = line[145:156].rstrip().lstrip()
             row['UPDATE_USER'] = line[156:186].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_part_relief():
+def gs_part_relief(columns=None):
     global DIR
     filename = DIR + 'gs_part_relief.txt'
     data = []
@@ -2474,10 +2670,15 @@ def gs_part_relief():
             row['CREATE_USER'] = line[51:81].rstrip().lstrip()
             row['UPDATE_DATE'] = line[81:92].rstrip().lstrip()
             row['UPDATE_USER'] = line[92:122].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_relief():
+def gs_relief(columns=None):
     global DIR
     filename = DIR + 'gs_relief.txt'
     data = []
@@ -2535,10 +2736,15 @@ def gs_relief():
             row['CREATE_USER'] = line[95:125].rstrip().lstrip()
             row['UPDATE_DATE'] = line[125:136].rstrip().lstrip()
             row['UPDATE_USER'] = line[136:166].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_triggerlock():
+def gs_triggerlock(columns=None):
     global DIR
     filename = DIR + 'gs_triggerlock.txt'
     data = []
@@ -2600,10 +2806,15 @@ def gs_triggerlock():
             row['CREATE_USER'] = line[238:268].rstrip().lstrip()
             row['UPDATE_DATE'] = line[268:279].rstrip().lstrip()
             row['UPDATE_USER'] = line[279:309].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_comment():
+def gs_comment(columns=None):
     global DIR
     filename = DIR + 'gs_comment.txt'
     data = []
@@ -2648,11 +2859,16 @@ def gs_comment():
             row['CREATE_USER'] = line[53:83].rstrip().lstrip()
             row['UPDATE_DATE'] = line[83:94].rstrip().lstrip()
             row['UPDATE_USER'] = line[94:124].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_request():
+def gs_request(columns=None):
     global DIR
     filename = DIR + 'gs_request.txt'
     data = []
@@ -2701,10 +2917,15 @@ def gs_request():
             row['CREATE_USER'] = line[113:143].rstrip().lstrip()
             row['UPDATE_DATE'] = line[143:154].rstrip().lstrip()
             row['UPDATE_USER'] = line[154:184].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_staff():
+def gs_staff(columns=None):
     global DIR
     filename = DIR + 'gs_staff.txt'
     data = []
@@ -2791,12 +3012,17 @@ def gs_staff():
             row['ACTION_STAGE'] = line[409:419].rstrip().lstrip()
             row['DR_USERNAME'] = line[419:449].rstrip().lstrip()
             row['GUID'] = line[449:479].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 # Now, in disk24, there's a bunch of constant tables that need to be translated
 # These tables all have codes and their meanings, which vary depending on district
-def gs_action():
+def gs_action(columns=None):
     global DIR
     filename = DIR + 'table_gs_action.txt'
     data = []
@@ -2837,10 +3063,15 @@ def gs_action():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_agency_off():
+def gs_agency_off(columns=None):
     global DIR
     filename = DIR + 'table_gs_agency_off.txt'
     data = []
@@ -2901,10 +3132,15 @@ def gs_agency_off():
             row['CREATE_USER'] = line[333:363].rstrip().lstrip()
             row['UPDATE_DATE'] = line[364:374].rstrip().lstrip()
             row['UPDATE_USER'] = line[375:405].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_business_type():
+def gs_business_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_business_type.txt'
     data = []
@@ -2945,10 +3181,15 @@ def gs_business_type():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[114:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_case_type():
+def gs_case_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_case_type.txt'
     data = []
@@ -2990,10 +3231,15 @@ def gs_case_type():
             row['CREATE_USER'] = line[79:109].rstrip().lstrip()
             row['UPDATE_DATE'] = line[110:120].rstrip().lstrip()
             row['UPDATE_USER'] = line[121:151].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_case_weight():
+def gs_case_weight(columns=None):
     global DIR
     filename = DIR + 'table_gs_case_weight.txt'
     data = []
@@ -3034,11 +3280,16 @@ def gs_case_weight():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_counsel_type():
+def gs_counsel_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_counsel_type.txt'
     data = []
@@ -3079,11 +3330,16 @@ def gs_counsel_type():
             row['CREATE_USER'] = line[83:113].rstrip().lstrip()
             row['UPDATE_DATE'] = line[114:124].rstrip().lstrip()
             row['UPDATE_USER'] = line[125:155].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_court_loc():
+def gs_court_loc(columns=None):
     global DIR
     filename = DIR + 'table_gs_court_loc.txt'
     data = []
@@ -3125,11 +3381,16 @@ def gs_court_loc():
             row['CREATE_USER'] = line[878:117].rstrip().lstrip()
             row['UPDATE_DATE'] = line[118:128].rstrip().lstrip()
             row['UPDATE_USER'] = line[129:159].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_deten_reason():
+def gs_deten_reason(columns=None):
     global DIR
     filename = DIR + 'table_gs_deten_reason.txt'
     data = []
@@ -3170,11 +3431,16 @@ def gs_deten_reason():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 # this one's a little messed up
-def gs_event_type():
+def gs_event_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_event_type.txt'
     data = []
@@ -3220,10 +3486,15 @@ def gs_event_type():
             row['CREATE_USER'] = line[119:149].rstrip().lstrip()
             row['UPDATE_DATE'] = line[150:160].rstrip().lstrip()
             #row['UPDATE_USER'] = line[].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_evid_disp():
+def gs_evid_disp(columns=None):
     global DIR
     filename = DIR + 'table_gs_evid_disp.txt'
     data = []
@@ -3264,10 +3535,15 @@ def gs_evid_disp():
             row['CREATE_USER'] = line[68:98].rstrip().lstrip()
             row['UPDATE_DATE'] = line[99:109].rstrip().lstrip()
             row['UPDATE_USER'] = line[110:140].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_evid_location():
+def gs_evid_location(columns=None):
     global DIR
     filename = DIR + 'table_gs_evid_location.txt'
     data = []
@@ -3308,10 +3584,15 @@ def gs_evid_location():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_evid_type():
+def gs_evid_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_evid_type.txt'
     data = []
@@ -3352,10 +3633,15 @@ def gs_evid_type():
             row['CREATE_USER'] = line[83:113].rstrip().lstrip()
             row['UPDATE_DATE'] = line[114:124].rstrip().lstrip()
             row['UPDATE_USER'] = line[125:115].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_expert():
+def gs_expert(columns=None):
     global DIR
     filename = DIR + 'table_gs_expert.txt'
     data = []
@@ -3425,10 +3711,15 @@ def gs_expert():
             row['CREATE_USER'] = line[334:364].rstrip().lstrip()
             row['UPDATE_DATE'] = line[364:375].rstrip().lstrip()
             row['UPDATE_USER'] = line[376:406].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_expert_type():
+def gs_expert_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_expert_type.txt'
     data = []
@@ -3469,10 +3760,15 @@ def gs_expert_type():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_immig_stat():
+def gs_immig_stat(columns=None):
     global DIR
     filename = DIR + 'table_gs_immig_stat.txt'
     data = []
@@ -3515,7 +3811,7 @@ def gs_immig_stat():
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
     return (sql, data)
 
-def gs_job_position():
+def gs_job_position(columns=None):
     global DIR
     filename = DIR + 'table_gs_job_position.txt'
     data = []
@@ -3556,10 +3852,15 @@ def gs_job_position():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_judge():
+def gs_judge(columns=None):
     global DIR
     filename = DIR + 'table_gs_judge.txt'
     data = []
@@ -3610,10 +3911,15 @@ def gs_judge():
             row['CREATE_USER'] = line[139:169].rstrip().lstrip()
             row['UPDATE_DATE'] = line[170:180].rstrip().lstrip()
             row['UPDATE_USER'] = line[181:211].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_judge_type():
+def gs_judge_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_judge_type.txt'
     data = []
@@ -3654,10 +3960,15 @@ def gs_judge_type():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_lit_track():
+def gs_lit_track(columns=None):
     global DIR
     filename = DIR + 'table_gs_lit_track.txt'
     data = []
@@ -3698,11 +4009,16 @@ def gs_lit_track():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
 
-def gs_location():
+def gs_location(columns=None):
     global DIR
     filename = DIR + 'table_gs_location.txt'
     data = []
@@ -3743,10 +4059,15 @@ def gs_location():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_oppose_attorn():
+def gs_oppose_attorn(columns=None):
     global DIR
     filename = DIR + 'table_gs_oppose_attorn.txt'
     data = []
@@ -3813,10 +4134,15 @@ def gs_oppose_attorn():
             row['CREATE_USER'] = line[370:400].rstrip().lstrip()
             row['UPDATE_DATE'] = line[401:411].rstrip().lstrip()
             row['UPDATE_USER'] = line[412:442].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_position():
+def gs_position(columns=None):
     global DIR
     filename = DIR + 'table_gs_position.txt'
     data = []
@@ -3857,10 +4183,15 @@ def gs_position():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_prop_type():
+def gs_prop_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_prop_type.txt'
     data = []
@@ -3901,10 +4232,15 @@ def gs_prop_type():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_prop_value_type():
+def gs_prop_value_type(columns=None):
     global DIR
     filename = DIR + 'table_gs_prop_value_type.txt'
     data = []
@@ -3946,10 +4282,15 @@ def gs_prop_value_type():
             row['CREATE_USER'] = line[93:123].rstrip().lstrip()
             row['UPDATE_DATE'] = line[124:134].rstrip().lstrip()
             row['UPDATE_USER'] = line[135:165].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_relate_case_reason():
+def gs_relate_case_reason(columns=None):
     global DIR
     filename = DIR + 'table_gs_relate_case_reason.txt'
     data = []
@@ -3991,10 +4332,15 @@ def gs_relate_case_reason():
             row['CREATE_USER'] = line[93:123].rstrip().lstrip()
             row['UPDATE_DATE'] = line[124:134].rstrip().lstrip()
             row['UPDATE_USER'] = line[135:165].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_relate_part_reason():
+def gs_relate_part_reason(columns=None):
     global DIR
     filename = DIR + 'table_gs_relate_part_reason.txt'
     data = []
@@ -4036,10 +4382,15 @@ def gs_relate_part_reason():
             row['CREATE_USER'] = line[73:103].rstrip().lstrip()
             row['UPDATE_DATE'] = line[104:114].rstrip().lstrip()
             row['UPDATE_USER'] = line[115:145].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_reservation():
+def gs_reservation(columns=None):
     global DIR
     filename = DIR + 'table_gs_reservation.txt'
     data = []
@@ -4081,10 +4432,15 @@ def gs_reservation():
             row['CREATE_USER'] = line[83:113].rstrip().lstrip()
             row['UPDATE_DATE'] = line[114:124].rstrip().lstrip()
             row['UPDATE_USER'] = line[125:155].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_security():
+def gs_security(columns=None):
     global DIR
     filename = DIR + 'table_gs_security.txt'
     data = []
@@ -4126,10 +4482,15 @@ def gs_security():
             row['CREATE_USER'] = line[83:113].rstrip().lstrip()
             row['UPDATE_DATE'] = line[114:124].rstrip().lstrip()
             row['UPDATE_USER'] = line[125:155].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_staff_section():
+def gs_staff_section(columns=None):
     global DIR
     filename = DIR + 'table_gs_staff_section.txt'
     data = []
@@ -4171,10 +4532,15 @@ def gs_staff_section():
             row['CREATE_USER'] = line[97:127].rstrip().lstrip()
             row['UPDATE_DATE'] = line[128:138].rstrip().lstrip()
             row['UPDATE_USER'] = line[139:169].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_staff_title():
+def gs_staff_title(columns=None):
     global DIR
     filename = DIR + 'table_gs_staff_title.txt'
     data = []
@@ -4215,10 +4581,15 @@ def gs_staff_title():
             row['CREATE_USER'] = line[93:123].rstrip().lstrip()
             row['UPDATE_DATE'] = line[124:134].rstrip().lstrip()
             row['UPDATE_USER'] = line[135:165].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
-def gs_unit():
+def gs_unit(columns=None):
     global DIR
     filename = DIR + 'table_gs_unit.txt'
     data = []
@@ -4259,6 +4630,11 @@ def gs_unit():
             row['CREATE_USER'] = line[83:113].rstrip().lstrip()
             row['UPDATE_DATE'] = line[114:124].rstrip().lstrip()
             row['UPDATE_USER'] = line[125:155].rstrip().lstrip()
+            if columns != None:
+                updated_row = {}
+                for col in columns:
+                    updated_row[col] = row[col]
+                row = updated_row
             data.append(row)
     return (sql, data)
 
